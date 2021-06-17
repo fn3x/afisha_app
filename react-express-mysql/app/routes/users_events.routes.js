@@ -3,22 +3,18 @@ module.exports = app => {
 
   var router = require("express").Router();
 
-  // Create a new event
-  router.post("/", usersEvents.create);
+  router.get("/user/:userId/event/:eventId", usersEvents.create);
 
-  // Retrieve all Tutorials
-  router.get("/", usersEvents.findAll);
+  router.get("/user/", usersEvents.findAll);
 
-  // Retrieve a single event with id
-  router.get("/byUserId/:userId", usersEvents.findByUserId);
+  router.get("/user/:userId", usersEvents.findByUserId);
 
-  // Update a event with id
-  router.put("/:id", usersEvents.update);
+  router.get("/event/:eventId", usersEvents.findByEventId);
 
-  // Delete a event with id
-  router.delete("/:id", usersEvents.delete);
+  router.put("/user/:userId", usersEvents.update);
 
-  // Delete all usersEvents
+  router.delete("/user/:userId", usersEvents.delete);
+
   router.delete("/", usersEvents.deleteAll);
 
   app.use('/api/users_events', router);

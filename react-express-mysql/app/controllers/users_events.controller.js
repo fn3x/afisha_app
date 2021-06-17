@@ -4,25 +4,14 @@ const Users = db.users;
 const UsersEvents = db.usersEvents;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new event
 exports.create = (req, res) => {
-  // Validate request
-  if (!req.body) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
-
-  // Create an event
   const usersEvent = {
-    user_id: req.body.userId,
-    event_id: req.body.eventId,
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE
+    user_id: req.params.userId,
+    event_id: req.params.eventId,
+    createdAt: db.Sequelize.DATE,
+    updatedAt: db.Sequelize.DATE
   };
 
-  // Save event in the database
   UsersEvents.create(usersEvent)
     .then(data => {
       res.send(data);
@@ -72,7 +61,6 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single event with an id
 exports.findByUserId = (req, res) => {
   const userId = req.params.userId;
 
@@ -90,11 +78,20 @@ exports.findByUserId = (req, res) => {
     .then(usersEvents => {
       userInfo = Object.assign({}, usersEvents)[0].user.dataValues
       return {
-        user_id: userInfo.id,
-        user_login: userInfo.login,
-        user_name: userInfo.name,
+        id: userInfo.id,
+        login: userInfo.login,
+        name: userInfo.name,
         events: usersEvents.map(userEvent => {
-          return userEvent.event
+          eventInfo = userEvent.event
+          return Object.assign({}, {
+            id: eventInfo.id,
+            title: eventInfo.title,
+            description: eventInfo.description,
+            price: eventInfo.price,
+            available_tickets: eventInfo.available_tickets,
+            location: eventInfo.location,
+            scheme_url: eventInfo.scheme_url,
+          })
         })
       }
     })
@@ -103,22 +100,60 @@ exports.findByUserId = (req, res) => {
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Tutorial with id=" + userId
+        message: "Error retrieving events with user id=" + userId
       });
     });
 };
 
-// Update an event by the id in the request
+exports.findByEventId = (req, res) => {
+  const eventId = req.params.eventId;
+
+  UsersEvents.findAll({
+    where: { event_id: eventId },
+    include: [
+      {
+        model: Users
+      },
+      {
+        model: Events
+      }
+    ]
+  })
+    .then(usersEvents => {
+      eventInfo = Object.assign({}, usersEvents)[0].event.dataValues
+      return {
+        id: eventInfo.id,
+        title: eventInfo.title,
+        description: eventInfo.description,
+        price: eventInfo.price,
+        available_tickets: eventInfo.available_tickets,
+        location: eventInfo.location,
+        scheme_url: eventInfo.scheme_url,
+        users: usersEvents.map(userEvent => {
+          return userEvent.user
+        })
+      }
+    })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving events with user id=" + userId
+      });
+    });
+};
+
 exports.update = (req, res) => {
-  const id = req.params.id;
+  const userId = req.params.userId;
 
   UsersEvents.update(req.body, {
-    where: { id: id }
+    where: { user_id: userId }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Tutorial was updated successfully."
+          message: "Users event was updated successfully."
         });
       } else {
         res.send({
@@ -133,9 +168,8 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete an event with the specified id in the request
 exports.delete = (req, res) => {
-  const id = req.params.id;
+  const userId = req.params.userId;
 
   UsersEvents.destroy({
     where: { id: id }
@@ -143,11 +177,11 @@ exports.delete = (req, res) => {
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "UsersEvents was deleted successfully!"
+          message: "Users event was deleted successfully!"
         });
       } else {
         res.send({
-          message: `Cannot delete event with id=${id}. Maybe event was not found!`
+          message: `Cannot delete users events with user id=${userId}. Maybe event was not found!`
         });
       }
     })
@@ -158,19 +192,18 @@ exports.delete = (req, res) => {
     });
 };
 
-// Delete all events from the database.
 exports.deleteAll = (req, res) => {
   UsersEvents.destroy({
     where: {},
     truncate: false
   })
     .then(nums => {
-      res.send({ message: `${nums} event were deleted successfully!` });
+      res.send({ message: `${nums} events were deleted successfully!` });
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all events."
+          err.message || "Some error occurred while removing all users events."
       });
     });
 };
