@@ -1,5 +1,5 @@
 const db = require("../models");
-const User = db.users;
+const Users = db.users;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new user
@@ -24,7 +24,7 @@ exports.create = (req, res) => {
   };
 
   // Save user in the database
-  User.create(user)
+  Users.create(user)
     .then(data => {
       res.send(data);
     })
@@ -41,7 +41,7 @@ exports.findAll = (req, res) => {
   const user = req.query.user;
   var condition = user ? { title: { [Op.like]: `%${user}%` } } : null;
 
-  User.findAll({ where: condition })
+  Users.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
@@ -57,7 +57,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  User.findByPk(id)
+  Users.findByPk(id)
     .then(data => {
       res.send(data);
     })
@@ -73,13 +73,13 @@ exports.update = (req, res) => {
   const id = req.params.id;
   const data = Object.assign(req.body, { updatedAt: Sequelize.DATE })
 
-  User.update(data, {
+  Users.update(data, {
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "User was updated successfully."
+          message: "Users was updated successfully."
         });
       } else {
         res.send({
@@ -98,13 +98,13 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  User.destroy({
+  Users.destroy({
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "User was deleted successfully!"
+          message: "Users was deleted successfully!"
         });
       } else {
         res.send({
@@ -121,7 +121,7 @@ exports.delete = (req, res) => {
 
 // Delete all users from the database.
 exports.deleteAll = (req, res) => {
-  User.destroy({
+  Users.destroy({
     where: {},
     truncate: false
   })

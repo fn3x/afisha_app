@@ -1,11 +1,13 @@
 const db = require("../models");
-const Event = db.events;
+const Events = db.events;
+const Users = db.users;
+const UsersEvents = db.usersEvents;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new event
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -13,17 +15,15 @@ exports.create = (req, res) => {
   }
 
   // Create an event
-  const event = {
-    title: req.body.title,
-    event_date: req.body.date,
-    price: req.body.price,
-    available_tickets: req.body.available_tickets,
-    scheme_url: req.body.scheme_url,
-    location: req.body.location
+  const usersEvent = {
+    user_id: req.body.userId,
+    event_id: req.body.eventId,
+    createdAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE
   };
 
   // Save event in the database
-  Event.create(event)
+  UsersEvents.create(usersEvent)
     .then(data => {
       res.send(data);
     })
@@ -35,12 +35,32 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all events from the database.
 exports.findAll = (req, res) => {
   const event = req.query.event;
   var condition = event ? { title: { [Op.like]: `%${event}%` } } : null;
 
-  Event.findAll({ where: condition })
+  UsersEvents.findAll({
+    where: condition,
+    include: [
+      {
+        model: Users
+      },
+      {
+        model: Events
+      }
+    ]
+  })
+    .then(usersEvents => {
+      return usersEvents.map(userEvent => {
+        return Object.assign({},
+          {
+            user_id: userEvent.user.id,
+            user_login: userEvent.user.login,
+            user_name: userEvent.user.name,
+            events: userEvent.event
+          })
+      })
+    })
     .then(data => {
       res.send(data);
     })
@@ -53,16 +73,37 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single event with an id
-exports.findOne = (req, res) => {
-  const id = req.params.id;
+exports.findByUserId = (req, res) => {
+  const userId = req.params.userId;
 
-  Event.findByPk(id)
+  UsersEvents.findAll({
+    where: { user_id: userId },
+    include: [
+      {
+        model: Users
+      },
+      {
+        model: Events
+      }
+    ]
+  })
+    .then(usersEvents => {
+      userInfo = Object.assign({}, usersEvents)[0].user.dataValues
+      return {
+        user_id: userInfo.id,
+        user_login: userInfo.login,
+        user_name: userInfo.name,
+        events: usersEvents.map(userEvent => {
+          return userEvent.event
+        })
+      }
+    })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Tutorial with id=" + id
+        message: "Error retrieving Tutorial with id=" + userId
       });
     });
 };
@@ -71,7 +112,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Event.update(req.body, {
+  UsersEvents.update(req.body, {
     where: { id: id }
   })
     .then(num => {
@@ -96,13 +137,13 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Event.destroy({
+  UsersEvents.destroy({
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Event was deleted successfully!"
+          message: "UsersEvents was deleted successfully!"
         });
       } else {
         res.send({
@@ -119,7 +160,7 @@ exports.delete = (req, res) => {
 
 // Delete all events from the database.
 exports.deleteAll = (req, res) => {
-  Event.destroy({
+  UsersEvents.destroy({
     where: {},
     truncate: false
   })

@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Event = sequelize.define("event", {
+  const Events = sequelize.define("events", {
     title: {
       type: Sequelize.STRING(45)
     },
@@ -21,7 +21,13 @@ module.exports = (sequelize, Sequelize) => {
     location: {
       type: Sequelize.STRING(45)
     },
-  });
+    created_at: {
+      type: Sequelize.DATE
+    },
+    updated_at: {
+      type: Sequelize.DATE
+    }
+  }, { underscored: true });
 
-  return Event;
+  return Events;
 };
