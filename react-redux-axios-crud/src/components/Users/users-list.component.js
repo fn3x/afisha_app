@@ -149,12 +149,6 @@ class UsersList extends Component {
                 </label>{" "}
                 {currentUser.phone}
               </div>
-              <div>
-                <label>
-                  <strong>Admin:</strong>
-                </label>{" "}
-                {currentUser.is_admin ? "Yes" : "No"}
-              </div>
 
               <Link
                 to={"/users/" + currentUser.id}

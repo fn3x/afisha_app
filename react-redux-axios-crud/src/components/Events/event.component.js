@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import EventsDataService from "../../services/events.service"
+import EventsDataService from "../../services/events_db.service"
 
 class Event extends Component {
   constructor(props) {

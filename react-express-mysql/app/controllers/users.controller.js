@@ -16,7 +16,6 @@ exports.create = (req, res) => {
   const user = {
     login: req.body.login,
     password: req.body.password,
-    is_admin: 0,
     name: req.body.name,
     phone: req.body.phone,
     email: req.body.email,
@@ -154,4 +153,20 @@ exports.deleteAll = (req, res) => {
           err.message || "Some error occurred while removing all user."
       });
     });
+};
+
+exports.allAccess = (req, res) => {
+  res.status(200).send("Public Content.");
+};
+
+exports.userBoard = (req, res) => {
+  res.status(200).send("User Content.");
+};
+
+exports.adminBoard = (req, res) => {
+  res.status(200).send("Admin Content.");
+};
+
+exports.moderatorBoard = (req, res) => {
+  res.status(200).send("Moderator Content.");
 };

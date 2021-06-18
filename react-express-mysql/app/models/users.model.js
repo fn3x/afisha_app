@@ -6,9 +6,6 @@ module.exports = (sequelize, Sequelize) => {
     password: {
       type: Sequelize.STRING(20)
     },
-    is_admin: {
-      type: Sequelize.BOOLEAN
-    },
     name: {
       type: Sequelize.STRING(45)
     },

@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { updateUser, deleteUser } from "../../actions/users"
-import UsersDataService from "../../services/users.service"
+import UsersDataService from "../../services/users_db.service"
 
 class User extends Component {
   constructor(props) {
@@ -22,8 +22,7 @@ class User extends Component {
         password: "",
         name: "",
         email: "",
-        phone: "",
-        is_admin: false,
+        phone: ""
       },
       message: ""
     }
@@ -86,35 +85,6 @@ class User extends Component {
           currentUser: response.data,
         })
         console.log(response.data)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
-
-  updateAdminStatus(status) {
-    var data = {
-      id: this.state.currentUser.id,
-      login: this.state.currentUser.login,
-      password: this.state.currentUser.password,
-      email: this.state.currentUser.email,
-      phone: this.state.currentUser.phone,
-      is_admin: status,
-    }
-
-    this.props
-      .updateUser(this.state.currentUser.id, data)
-      .then((reponse) => {
-        console.log(reponse)
-
-        this.setState((prevState) => ({
-          currentUser: {
-            ...prevState.currentUser,
-            is_admin: status,
-          },
-        }))
-
-        this.setState({ message: "The status was updated successfully!" })
       })
       .catch((e) => {
         console.log(e)
@@ -205,30 +175,7 @@ class User extends Component {
                   onChange={this.onChangeEmail}
                 />
               </div>
-
-              <div className="form-group">
-                <label>
-                  <strong>Admin status:</strong>
-                </label>
-                {currentUser.is_admin ? " Yes" : " No"}
-              </div>
             </form>
-
-            {currentUser.is_admin ? (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updateAdminStatus(false)}
-              >
-                Remove admin rights
-              </button>
-            ) : (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updateAdminStatus(true)}
-              >
-                Grant admin rights
-              </button>
-            )}
 
             <button
               className="badge badge-danger mr-2"

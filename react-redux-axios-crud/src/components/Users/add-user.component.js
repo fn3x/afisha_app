@@ -20,7 +20,6 @@ class AddUser extends Component {
       name: "",
       email: "",
       phone: "",
-      is_admin: false,
 
       submitted: false,
     }
@@ -60,7 +59,7 @@ class AddUser extends Component {
     const { login, password, name, email, phone } = this.state
 
     this.props
-      .createUser({ login, password, name, email, phone, is_admin: false })
+      .createUser({ login, password, name, email, phone })
       .then((data) => {
         this.setState({
           id: data.id,
@@ -69,7 +68,6 @@ class AddUser extends Component {
           name: data.name,
           email: data.email,
           phone: data.phone,
-          is_admin: data.is_admin,
 
           submitted: true,
         })
@@ -87,7 +85,6 @@ class AddUser extends Component {
       name: "",
       email: "",
       phone: "",
-      is_admin: false,
 
       submitted: false,
     })
