@@ -42,9 +42,9 @@ class UsersList extends Component {
     })
   }
 
-  setActiveUser(tutorial, index) {
+  setActiveUser(user, index) {
     this.setState({
-      currentUser: tutorial,
+      currentUser: user,
       currentIndex: index,
     })
   }
@@ -122,7 +122,7 @@ class UsersList extends Component {
 
           <button
             className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllTutorials}
+            onClick={this.removeAllUsers}
           >
             Remove All
           </button>

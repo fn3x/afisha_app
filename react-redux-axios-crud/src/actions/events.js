@@ -23,7 +23,7 @@ export const createEvent = (eventInfo) => async (dispatch) => {
   }
 }
 
-export const retrieveUsers = () => async (dispatch) => {
+export const retrieveEvents = () => async (dispatch) => {
   try {
     const res = await EventsDataService.getAll()
 
@@ -36,7 +36,7 @@ export const retrieveUsers = () => async (dispatch) => {
   }
 }
 
-export const updateUser = (id, data) => async (dispatch) => {
+export const updateEvent = (id, data) => async (dispatch) => {
   try {
     const res = await EventsDataService.update(id, data)
 
@@ -51,7 +51,7 @@ export const updateUser = (id, data) => async (dispatch) => {
   }
 }
 
-export const deleteUser = (id) => async (dispatch) => {
+export const deleteEvent = (id) => async (dispatch) => {
   try {
     await EventsDataService.delete(id)
 
@@ -64,7 +64,7 @@ export const deleteUser = (id) => async (dispatch) => {
   }
 }
 
-export const deleteAllUsers = () => async (dispatch) => {
+export const deleteAllEvents = () => async (dispatch) => {
   try {
     const res = await EventsDataService.deleteAll()
 

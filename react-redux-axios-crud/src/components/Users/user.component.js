@@ -7,6 +7,8 @@ class User extends Component {
   constructor(props) {
     super(props)
     this.onChangeName = this.onChangeName.bind(this)
+    this.onChangeLogin = this.onChangeLogin.bind(this)
+    this.onChangePassword = this.onChangePassword.bind(this)
     this.onChangeEmail = this.onChangeEmail.bind(this)
     this.getUser = this.getUser.bind(this)
     this.updateAdminStatus = this.updateAdminStatus.bind(this)
@@ -16,6 +18,8 @@ class User extends Component {
     this.state = {
       currentUser: {
         id: null,
+        login: "",
+        password: "",
         name: "",
         email: "",
         phone: "",
@@ -53,6 +57,28 @@ class User extends Component {
     }))
   }
 
+  onChangeLogin(e) {
+    const login = e.target.value
+
+    this.setState((prevState) => ({
+      currentUser: {
+        ...prevState.currentUser,
+        login: login,
+      },
+    }))
+  }
+
+  onChangePassword(e) {
+    const password = e.target.value
+
+    this.setState((prevState) => ({
+      currentUser: {
+        ...prevState.currentUser,
+        password: password,
+      },
+    }))
+  }
+
   getUser(id) {
     UsersDataService.get(id)
       .then((response) => {
@@ -69,6 +95,8 @@ class User extends Component {
   updateAdminStatus(status) {
     var data = {
       id: this.state.currentUser.id,
+      login: this.state.currentUser.login,
+      password: this.state.currentUser.password,
       email: this.state.currentUser.email,
       phone: this.state.currentUser.phone,
       is_admin: status,
@@ -137,22 +165,42 @@ class User extends Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Email</label>
+                <label htmlFor="login">Login</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="description"
+                  id="login"
+                  value={currentUser.login}
+                  onChange={this.onChangeLogin}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="password"
+                  value={currentUser.password}
+                  onChange={this.onChangePassword}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="email"
                   value={currentUser.email}
                   onChange={this.onChangeEmail}
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="description">Phone</label>
+                <label htmlFor="phone">Phone</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="description"
+                  id="phone"
                   value={currentUser.phone}
                   onChange={this.onChangeEmail}
                 />

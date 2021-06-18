@@ -9,6 +9,8 @@ module.exports = app => {
   // Retrieve all Tutorials
   router.get("/", events.findAll);
 
+  router.get("/bytitle/:title", events.findByTitle);
+
   // Retrieve a single event with id
   router.get("/:id", events.findOne);
 

@@ -1,29 +1,35 @@
 import http from "../http-common"
 
+const baseURL = "/users"
+
 class UsersDataService {
   getAll() {
-    return http.get("/users")
+    return http.get(baseURL)
+  }
+
+  get(id) {
+    return http.get(`${baseURL}/${id}`)
   }
 
   findByLogin(login) {
-    return http.get(`/users/${login}`)
+    return http.get(`${baseURL}/${login}`)
   }
 
   create(data) {
     console.log(data)
-    return http.post("/users/", data)
+    return http.post(baseURL, data)
   }
 
   update(id, data) {
-    return http.put(`/users/${id}`, data)
+    return http.put(`${baseURL}/${id}`, data)
   }
 
   delete(id) {
-    return http.delete(`/users/${id}`)
+    return http.delete(`${baseURL}/${id}`)
   }
 
   deleteAll() {
-    return http.delete(`/users`)
+    return http.delete(baseURL)
   }
 }
 

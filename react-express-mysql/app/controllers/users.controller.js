@@ -81,7 +81,7 @@ exports.findByLogin = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving users."
+          err.message || "Some error occurred while finding login."
       });
     });
 };

@@ -5,6 +5,8 @@ import "./App.css"
 
 import AddUser from "./components/Users/add-user.component"
 import User from "./components/Users/user.component"
+import Event from "./components/Events/event.component"
+import EventsList from './components/Events/events-list.component'
 import UsersList from "./components/Users/users-list.component"
 
 class App extends Component {
@@ -42,10 +44,11 @@ class App extends Component {
         <div className="container mt-3">
           <Switch>
             <Route exact path="/users" component={UsersList} />
-            <Route exact path="/events" component={UsersList} />
+            <Route exact path="/events" component={EventsList} />
             <Route exact path="/users/add" component={AddUser} />
             <Route exact path="/events/add" component={AddUser} />
             <Route path="/users/:id" component={User} />
+            <Route path="/events/:id" component={Event} />
           </Switch>
         </div>
       </Router>
