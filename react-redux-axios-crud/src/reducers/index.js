@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
-import tutorials from "./tutorials";
+import users from "./users";
+import events from "./events";
+import users_events from "./users_events";
 
 export default combineReducers({
-  tutorials,
+  users, events, users_events
 });

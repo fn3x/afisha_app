@@ -1,3 +1,4 @@
+const moment = require('moment');
 const db = require("../models");
 const Events = db.events;
 const Users = db.users;
@@ -8,8 +9,8 @@ exports.create = (req, res) => {
   const usersEvent = {
     user_id: req.params.userId,
     event_id: req.params.eventId,
-    createdAt: db.Sequelize.DATE,
-    updatedAt: db.Sequelize.DATE
+    createdAt: moment().format(),
+    updatedAt: moment().format()
   };
 
   UsersEvents.create(usersEvent)
@@ -146,8 +147,11 @@ exports.findByEventId = (req, res) => {
 
 exports.update = (req, res) => {
   const userId = req.params.userId;
+  const data = Object.assign(req.body, {
+    updated_at: moment().format()
+  })
 
-  UsersEvents.update(req.body, {
+  UsersEvents.update(data, {
     where: { user_id: userId }
   })
     .then(num => {

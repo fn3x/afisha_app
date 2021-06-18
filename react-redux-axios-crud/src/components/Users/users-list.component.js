@@ -1,20 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  retrieveTutorials,
-  findTutorialsByTitle,
-  deleteAllTutorials,
-} from "../actions/tutorials";
+  retrieveUsers,
+  deleteAllUsers,
+} from "../../actions/users";
 import { Link } from "react-router-dom";
 
-class TutorialsList extends Component {
+class UsersList extends Component {
   constructor(props) {
     super(props);
     this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this);
     this.refreshData = this.refreshData.bind(this);
-    this.setActiveTutorial = this.setActiveTutorial.bind(this);
+    this.setActiveUser = this.setActiveUser.bind(this);
     this.findByTitle = this.findByTitle.bind(this);
-    this.removeAllTutorials = this.removeAllTutorials.bind(this);
+    this.removeAllUsers = this.removeAllUsers.bind(this);
 
     this.state = {
       currentTutorial: null,
@@ -24,7 +23,7 @@ class TutorialsList extends Component {
   }
 
   componentDidMount() {
-    this.props.retrieveTutorials();
+    this.props.retrieveUsers();
   }
 
   onChangeSearchTitle(e) {
@@ -42,16 +41,16 @@ class TutorialsList extends Component {
     });
   }
 
-  setActiveTutorial(tutorial, index) {
+  setActiveUser(tutorial, index) {
     this.setState({
       currentTutorial: tutorial,
       currentIndex: index,
     });
   }
 
-  removeAllTutorials() {
+  removeAllUsers() {
     this.props
-      .deleteAllTutorials()
+      .deleteAllUsers()
       .then((response) => {
         console.log(response);
         this.refreshData();
@@ -63,13 +62,11 @@ class TutorialsList extends Component {
 
   findByTitle() {
     this.refreshData();
-
-    this.props.findTutorialsByTitle(this.state.searchTitle);
   }
 
   render() {
-    const { searchTitle, currentTutorial, currentIndex } = this.state;
-    const { tutorials } = this.props;
+    const { searchTitle, currentTutorial: currentUser, currentIndex } = this.state;
+    const { users } = this.props;
 
     return (
       <div className="list row">
@@ -94,20 +91,20 @@ class TutorialsList extends Component {
           </div>
         </div>
         <div className="col-md-6">
-          <h4>Tutorials List</h4>
+          <h4>Users List</h4>
 
           <ul className="list-group">
-            {tutorials &&
-              tutorials.map((tutorial, index) => (
+            {users &&
+              users.map((user, index) => (
                 <li
                   className={
                     "list-group-item " +
                     (index === currentIndex ? "active" : "")
                   }
-                  onClick={() => this.setActiveTutorial(tutorial, index)}
+                  onClick={() => this.setActiveUser(user, index)}
                   key={index}
                 >
-                  {tutorial.title}
+                  {user.name}
                 </li>
               ))}
           </ul>
@@ -120,30 +117,36 @@ class TutorialsList extends Component {
           </button>
         </div>
         <div className="col-md-6">
-          {currentTutorial ? (
+          {currentUser ? (
             <div>
-              <h4>Tutorial</h4>
+              <h4>User</h4>
               <div>
                 <label>
-                  <strong>Title:</strong>
+                  <strong>Name:</strong>
                 </label>{" "}
-                {currentTutorial.title}
+                {currentUser.name}
               </div>
               <div>
                 <label>
-                  <strong>Description:</strong>
+                  <strong>Email:</strong>
                 </label>{" "}
-                {currentTutorial.description}
+                {currentUser.email}
               </div>
               <div>
                 <label>
-                  <strong>Status:</strong>
+                  <strong>Phone:</strong>
                 </label>{" "}
-                {currentTutorial.published ? "Published" : "Pending"}
+                {currentUser.phone}
+              </div>
+              <div>
+                <label>
+                  <strong>Admin:</strong>
+                </label>{" "}
+                {currentUser.is_admin ? "Yes" : "No"}
               </div>
 
               <Link
-                to={"/tutorials/" + currentTutorial.id}
+                to={"/users/" + currentUser.id}
                 className="badge badge-warning"
               >
                 Edit
@@ -152,7 +155,7 @@ class TutorialsList extends Component {
           ) : (
             <div>
               <br />
-              <p>Please click on a Tutorial...</p>
+              <p>Please click on a user...</p>
             </div>
           )}
         </div>
@@ -163,12 +166,11 @@ class TutorialsList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    tutorials: state.tutorials,
+    users: state.users,
   };
 };
 
 export default connect(mapStateToProps, {
-  retrieveTutorials,
-  findTutorialsByTitle,
-  deleteAllTutorials,
-})(TutorialsList);
+  retrieveUsers,
+  deleteAllUsers,
+})(UsersList);

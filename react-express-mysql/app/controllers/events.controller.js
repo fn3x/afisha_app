@@ -1,3 +1,4 @@
+const moment = require('moment');
 const db = require("../models");
 const Events = db.events;
 const Op = db.Sequelize.Op;
@@ -19,7 +20,9 @@ exports.create = (req, res) => {
     price: req.body.price,
     available_tickets: req.body.available_tickets,
     scheme_url: req.body.scheme_url,
-    location: req.body.location
+    location: req.body.location,
+    createdAt: moment().format(),
+    updatedAt: moment().format()
   };
 
   // Save event in the database
@@ -70,24 +73,27 @@ exports.findOne = (req, res) => {
 // Update an event by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
+  const data = Object.assign(req.body, {
+    updated_at: moment().format()
+  })
 
-  Events.update(req.body, {
+  Events.update(data, {
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Tutorial was updated successfully."
+          message: "Event was updated successfully."
         });
       } else {
         res.send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+          message: `Cannot update event with id=${id}. Maybe event was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
+        message: "Error updating event with id=" + id
       });
     });
 };
@@ -102,7 +108,7 @@ exports.delete = (req, res) => {
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Events was deleted successfully!"
+          message: "Event was deleted successfully!"
         });
       } else {
         res.send({

@@ -1,3 +1,4 @@
+const moment = require('moment');
 const db = require("../models");
 const Users = db.users;
 const Op = db.Sequelize.Op;
@@ -5,7 +6,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new user
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.login) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -19,8 +20,8 @@ exports.create = (req, res) => {
     name: req.body.name,
     phone: req.body.phone,
     email: req.body.email,
-    createdAt: Sequelize.DATE,
-    updatedAt: Sequelize.DATE
+    createdAt: moment().format(),
+    updatedAt: moment().format()
   };
 
   // Save user in the database
@@ -71,7 +72,9 @@ exports.findOne = (req, res) => {
 // Update user by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  const data = Object.assign(req.body, { updatedAt: Sequelize.DATE })
+  const data = Object.assign(req.body, {
+    updated_at: moment().format()
+  })
 
   Users.update(data, {
     where: { id: id }
@@ -79,7 +82,7 @@ exports.update = (req, res) => {
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Users was updated successfully."
+          message: "User was updated successfully."
         });
       } else {
         res.send({
