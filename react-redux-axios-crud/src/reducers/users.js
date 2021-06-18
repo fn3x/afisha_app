@@ -5,22 +5,22 @@ import {
   UPDATE_USER,
   DELETE_USER,
   DELETE_ALL_USERS,
-} from "../actions/types";
+} from "../actions/types"
 
-const initialState = [];
+const initialState = []
 
 function userReducer(users = initialState, action) {
-  const { type, payload } = action;
+  const { type, payload } = action
 
   switch (type) {
     case CREATE_USER:
-      return [...users, payload];
+      return [...users, payload]
 
     case RETRIEVE_USERS:
-      return payload;
+      return payload
     
     case FIND_USER:
-      return payload;
+      return payload
 
     case UPDATE_USER:
       return users.map((user) => {
@@ -28,21 +28,21 @@ function userReducer(users = initialState, action) {
           return {
             ...user,
             ...payload,
-          };
+          }
         } else {
-          return user;
+          return user
         }
-      });
+      })
 
     case DELETE_USER:
-      return users.filter(({ id }) => id !== payload.id);
+      return users.filter(({ id }) => id !== payload.id)
 
     case DELETE_ALL_USERS:
-      return [];
+      return []
 
     default:
-      return users;
+      return users
   }
-};
+}
 
-export default userReducer;
+export default userReducer

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import React, { Component } from "react"
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import "bootstrap/dist/css/bootstrap.min.css"
+import "./App.css"
 
-import AddUser from "./components/Users/add-user.component";
-import User from "./components/Users/user.component";
-import UsersList from "./components/Users/users-list.component";
+import AddUser from "./components/Users/add-user.component"
+import User from "./components/Users/user.component"
+import UsersList from "./components/Users/users-list.component"
 
 class App extends Component {
   render() {
@@ -49,8 +49,8 @@ class App extends Component {
           </Switch>
         </div>
       </Router>
-    );
+    )
   }
 }
 
-export default App;
+export default App

@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { createUser } from "../../actions/users";
+import React, { Component } from "react"
+import { connect } from "react-redux"
+import { createUser } from "../../actions/users"
 
 class AddUser extends Component {
   constructor(props) {
-    super(props);
-    this.onChangeLogin = this.onChangeLogin.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.onChangeName = this.onChangeName.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePhone = this.onChangePhone.bind(this);
-    this.saveUser = this.saveUser.bind(this);
-    this.newUser = this.newUser.bind(this);
+    super(props)
+    this.onChangeLogin = this.onChangeLogin.bind(this)
+    this.onChangePassword = this.onChangePassword.bind(this)
+    this.onChangeName = this.onChangeName.bind(this)
+    this.onChangeEmail = this.onChangeEmail.bind(this)
+    this.onChangePhone = this.onChangePhone.bind(this)
+    this.saveUser = this.saveUser.bind(this)
+    this.newUser = this.newUser.bind(this)
 
     this.state = {
       id: null,
@@ -23,41 +23,41 @@ class AddUser extends Component {
       is_admin: false,
 
       submitted: false,
-    };
+    }
   }
 
   onChangeLogin(e) {
     this.setState({
       login: e.target.value,
-    });
+    })
   }
 
   onChangePassword(e) {
     this.setState({
       password: e.target.value,
-    });
+    })
   }
 
   onChangeName(e) {
     this.setState({
       name: e.target.value,
-    });
+    })
   }
 
   onChangeEmail(e) {
     this.setState({
       email: e.target.value,
-    });
+    })
   }
 
   onChangePhone(e) {
     this.setState({
       phone: e.target.value,
-    });
+    })
   }
 
   saveUser() {
-    const { login, password, name, email, phone } = this.state;
+    const { login, password, name, email, phone } = this.state
 
     this.props
       .createUser({ login, password, name, email, phone, is_admin: false })
@@ -72,12 +72,12 @@ class AddUser extends Component {
           is_admin: data.is_admin,
 
           submitted: true,
-        });
-        console.log(data);
+        })
+        console.log(data)
       })
       .catch((e) => {
-        console.log(e);
-      });
+        console.log(e)
+      })
   }
 
   newUser() {
@@ -90,7 +90,7 @@ class AddUser extends Component {
       is_admin: false,
 
       submitted: false,
-    });
+    })
   }
 
   render() {
@@ -176,8 +176,8 @@ class AddUser extends Component {
           </div>
         )}
       </div>
-    );
+    )
   }
 }
 
-export default connect(null, { createUser })(AddUser);
+export default connect(null, { createUser })(AddUser)

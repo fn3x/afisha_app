@@ -5,22 +5,22 @@ import {
   UPDATE_USER_EVENT,
   DELETE_USER_EVENT,
   DELETE_ALL_USERS_EVENTS
-} from "../actions/types";
+} from "../actions/types"
 
-const initialState = [];
+const initialState = []
 
 function usersEventsReducer(usersEvents = initialState, action) {
-  const { type, payload } = action;
+  const { type, payload } = action
 
   switch (type) {
     case CREATE_USER_EVENT:
-      return [...usersEvents, payload];
+      return [...usersEvents, payload]
 
     case RETRIEVE_USER_EVENTS:
-      return payload;
+      return payload
 
     case RETRIEVE_EVENT_USERS:
-      return payload;
+      return payload
 
     case UPDATE_USER_EVENT:
       return usersEvents.map((event) => {
@@ -28,21 +28,21 @@ function usersEventsReducer(usersEvents = initialState, action) {
           return {
             ...event,
             ...payload,
-          };
+          }
         } else {
-          return event;
+          return event
         }
-      });
+      })
 
     case DELETE_USER_EVENT:
-      return usersEvents.filter(({ id }) => id !== payload.id);
+      return usersEvents.filter(({ id }) => id !== payload.id)
 
     case DELETE_ALL_USERS_EVENTS:
-      return [];
+      return []
 
     default:
-      return usersEvents;
+      return usersEvents
   }
-};
+}
 
-export default usersEventsReducer;
+export default usersEventsReducer

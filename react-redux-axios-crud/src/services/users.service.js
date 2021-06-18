@@ -1,30 +1,30 @@
-import http from "../http-common";
+import http from "../http-common"
 
 class UsersDataService {
   getAll() {
-    return http.get("/users");
+    return http.get("/users")
   }
 
   findByLogin(login) {
-    return http.get(`/users/${login}`);
+    return http.get(`/users/${login}`)
   }
 
   create(data) {
     console.log(data)
-    return http.post("/users/", data);
+    return http.post("/users/", data)
   }
 
   update(id, data) {
-    return http.put(`/users/${id}`, data);
+    return http.put(`/users/${id}`, data)
   }
 
   delete(id) {
-    return http.delete(`/users/${id}`);
+    return http.delete(`/users/${id}`)
   }
 
   deleteAll() {
-    return http.delete(`/users`);
+    return http.delete(`/users`)
   }
 }
 
-export default new UsersDataService();
+export default new UsersDataService()

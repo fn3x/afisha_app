@@ -1,83 +1,83 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from "react"
+import { connect } from "react-redux"
 import {
   retrieveUsers,
   deleteAllUsers,
   findByLogin
-} from "../../actions/users";
-import { Link } from "react-router-dom";
+} from "../../actions/users"
+import { Link } from "react-router-dom"
 
 class UsersList extends Component {
   constructor(props) {
-    super(props);
-    this.onChangeSearchLogin = this.onChangeSearchLogin.bind(this);
-    this.refreshData = this.refreshData.bind(this);
-    this.setActiveUser = this.setActiveUser.bind(this);
-    this.findByLogin = this.findByLogin.bind(this);
-    this.removeAllUsers = this.removeAllUsers.bind(this);
+    super(props)
+    this.onChangeSearchLogin = this.onChangeSearchLogin.bind(this)
+    this.refreshData = this.refreshData.bind(this)
+    this.setActiveUser = this.setActiveUser.bind(this)
+    this.findByLogin = this.findByLogin.bind(this)
+    this.removeAllUsers = this.removeAllUsers.bind(this)
 
     this.state = {
       currentUser: null,
       currentIndex: -1,
       searchLogin: "",
-    };
+    }
   }
 
   componentDidMount() {
-    this.props.retrieveUsers();
+    this.props.retrieveUsers()
   }
 
   onChangeSearchLogin(e) {
-    const searchLogin = e.target.value;
+    const searchLogin = e.target.value
 
     this.setState({
       searchLogin: searchLogin,
-    });
+    })
   }
 
   refreshData() {
     this.setState({
       currentUser: null,
       currentIndex: -1,
-    });
+    })
   }
 
   setActiveUser(tutorial, index) {
     this.setState({
       currentUser: tutorial,
       currentIndex: index,
-    });
+    })
   }
 
   removeAllUsers() {
     this.props
       .deleteAllUsers()
       .then((response) => {
-        console.log(response);
-        this.refreshData();
+        console.log(response)
+        this.refreshData()
       })
       .catch((e) => {
-        console.log(e);
-      });
+        console.log(e)
+      })
   }
 
   findByLogin() {
     this.props
       .findByLogin(this.state.searchLogin)
       .then((response) => {
-        console.log(response);
-        this.refreshData();
+        console.log(response)
+        this.refreshData()
       })
       .catch((e) => {
-        console.log(e);
-      });
+        console.log(e)
+      })
 
-    this.refreshData();
+    this.refreshData()
   }
 
   render() {
-    const { searchLogin, currentUser, currentIndex } = this.state;
-    const { users } = this.props;
+    const { searchLogin, currentUser, currentIndex } = this.state
+    const { users } = this.props
 
     return (
       <div className="list row">
@@ -171,18 +171,18 @@ class UsersList extends Component {
           )}
         </div>
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     users: state.users,
-  };
-};
+  }
+}
 
 export default connect(mapStateToProps, {
   retrieveUsers,
   deleteAllUsers,
   findByLogin
-})(UsersList);
+})(UsersList)

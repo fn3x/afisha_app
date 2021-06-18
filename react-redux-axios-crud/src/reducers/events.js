@@ -4,19 +4,19 @@ import {
   UPDATE_EVENT,
   DELETE_EVENT,
   DELETE_ALL_EVENTS,
-} from "../actions/types";
+} from "../actions/types"
 
-const initialState = [];
+const initialState = []
 
 function eventReducer(events = initialState, action) {
-  const { type, payload } = action;
+  const { type, payload } = action
 
   switch (type) {
     case CREATE_EVENT:
-      return [...events, payload];
+      return [...events, payload]
 
     case RETRIEVE_EVENTS:
-      return payload;
+      return payload
 
     case UPDATE_EVENT:
       return events.map((event) => {
@@ -24,21 +24,21 @@ function eventReducer(events = initialState, action) {
           return {
             ...event,
             ...payload,
-          };
+          }
         } else {
-          return event;
+          return event
         }
-      });
+      })
 
     case DELETE_EVENT:
-      return events.filter(({ id }) => id !== payload.id);
+      return events.filter(({ id }) => id !== payload.id)
 
     case DELETE_ALL_EVENTS:
-      return [];
+      return []
 
     default:
-      return events;
+      return events
   }
-};
+}
 
-export default eventReducer;
+export default eventReducer
