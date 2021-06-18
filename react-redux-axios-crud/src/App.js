@@ -12,18 +12,28 @@ class App extends Component {
     return (
       <Router>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/users"} className="navbar-brand">
+          <Link to={"/"} className="navbar-brand">
             Afisha
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link to={"/users"} className="nav-link">
-                Users
+                Users list
               </Link>
             </li>
             <li className="nav-item">
-              <Link to={"/add"} className="nav-link">
-                Add
+              <Link to={"/events"} className="nav-link">
+                Events list
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/users/add"} className="nav-link">
+                Add user
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/events/add"} className="nav-link">
+                Add event
               </Link>
             </li>
           </div>
@@ -31,8 +41,10 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/users"]} component={UsersList} />
-            <Route exact path="/add" component={AddUser} />
+            <Route exact path="/users" component={UsersList} />
+            <Route exact path="/events" component={UsersList} />
+            <Route exact path="/users/add" component={AddUser} />
+            <Route exact path="/events/add" component={AddUser} />
             <Route path="/users/:id" component={User} />
           </Switch>
         </div>

@@ -1,6 +1,7 @@
 import {
   CREATE_USER,
   RETRIEVE_USERS,
+  FIND_USER,
   UPDATE_USER,
   DELETE_USER,
   DELETE_ALL_USERS
@@ -14,6 +15,21 @@ export const createUser = (userInfo) => async (dispatch) => {
 
     dispatch({
       type: CREATE_USER,
+      payload: res.data,
+    });
+
+    return Promise.resolve(res.data);
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+export const findByLogin = (login) => async (dispatch) => {
+  try {
+    const res = await UsersDataService.findByLogin(login);
+
+    dispatch({
+      type: FIND_USER,
       payload: res.data,
     });
 

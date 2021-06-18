@@ -3,22 +3,23 @@ import { connect } from "react-redux";
 import {
   retrieveUsers,
   deleteAllUsers,
+  findByLogin
 } from "../../actions/users";
 import { Link } from "react-router-dom";
 
 class UsersList extends Component {
   constructor(props) {
     super(props);
-    this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this);
+    this.onChangeSearchLogin = this.onChangeSearchLogin.bind(this);
     this.refreshData = this.refreshData.bind(this);
     this.setActiveUser = this.setActiveUser.bind(this);
-    this.findByTitle = this.findByTitle.bind(this);
+    this.findByLogin = this.findByLogin.bind(this);
     this.removeAllUsers = this.removeAllUsers.bind(this);
 
     this.state = {
-      currentTutorial: null,
+      currentUser: null,
       currentIndex: -1,
-      searchTitle: "",
+      searchLogin: "",
     };
   }
 
@@ -26,24 +27,24 @@ class UsersList extends Component {
     this.props.retrieveUsers();
   }
 
-  onChangeSearchTitle(e) {
-    const searchTitle = e.target.value;
+  onChangeSearchLogin(e) {
+    const searchLogin = e.target.value;
 
     this.setState({
-      searchTitle: searchTitle,
+      searchLogin: searchLogin,
     });
   }
 
   refreshData() {
     this.setState({
-      currentTutorial: null,
+      currentUser: null,
       currentIndex: -1,
     });
   }
 
   setActiveUser(tutorial, index) {
     this.setState({
-      currentTutorial: tutorial,
+      currentUser: tutorial,
       currentIndex: index,
     });
   }
@@ -60,12 +61,22 @@ class UsersList extends Component {
       });
   }
 
-  findByTitle() {
+  findByLogin() {
+    this.props
+      .findByLogin(this.state.searchLogin)
+      .then((response) => {
+        console.log(response);
+        this.refreshData();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
     this.refreshData();
   }
 
   render() {
-    const { searchTitle, currentTutorial: currentUser, currentIndex } = this.state;
+    const { searchLogin, currentUser, currentIndex } = this.state;
     const { users } = this.props;
 
     return (
@@ -75,15 +86,15 @@ class UsersList extends Component {
             <input
               type="text"
               className="form-control"
-              placeholder="Search by title"
-              value={searchTitle}
-              onChange={this.onChangeSearchTitle}
+              placeholder="Search by login"
+              value={searchLogin}
+              onChange={this.onChangeSearchLogin}
             />
             <div className="input-group-append">
               <button
                 className="btn btn-outline-secondary"
                 type="button"
-                onClick={this.findByTitle}
+                onClick={this.findByLogin}
               >
                 Search
               </button>
@@ -173,4 +184,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   retrieveUsers,
   deleteAllUsers,
+  findByLogin
 })(UsersList);

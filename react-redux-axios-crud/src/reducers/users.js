@@ -1,6 +1,7 @@
 import {
   CREATE_USER,
   RETRIEVE_USERS,
+  FIND_USER,
   UPDATE_USER,
   DELETE_USER,
   DELETE_ALL_USERS,
@@ -16,6 +17,9 @@ function userReducer(users = initialState, action) {
       return [...users, payload];
 
     case RETRIEVE_USERS:
+      return payload;
+    
+    case FIND_USER:
       return payload;
 
     case UPDATE_USER:

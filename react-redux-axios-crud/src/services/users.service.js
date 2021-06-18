@@ -5,8 +5,8 @@ class UsersDataService {
     return http.get("/users");
   }
 
-  get(id) {
-    return http.get(`/users/${id}`);
+  findByLogin(login) {
+    return http.get(`/users/${login}`);
   }
 
   create(data) {

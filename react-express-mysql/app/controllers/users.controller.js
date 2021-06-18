@@ -39,10 +39,7 @@ exports.create = (req, res) => {
 
 // Retrieve all users from the database.
 exports.findAll = (req, res) => {
-  const user = req.query.user;
-  var condition = user ? { title: { [Op.like]: `%${user}%` } } : null;
-
-  Users.findAll({ where: condition })
+  Users.findAll()
     .then(data => {
       res.send(data);
     })
@@ -65,6 +62,26 @@ exports.findOne = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: "Error retrieving user with id=" + id
+      });
+    });
+};
+
+// Find a single user with an id
+exports.findByLogin = (req, res) => {
+  const login = req.params.login;
+
+  Users.findAll({
+    where: {
+      login: login
+    }
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving users."
       });
     });
 };
