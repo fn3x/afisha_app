@@ -1,6 +1,7 @@
 import {
   CREATE_EVENT,
   RETRIEVE_EVENTS,
+  FIND_EVENT,
   UPDATE_EVENT,
   DELETE_EVENT,
   DELETE_ALL_EVENTS,
@@ -16,6 +17,9 @@ function eventReducer(events = initialState, action) {
       return [...events, payload]
 
     case RETRIEVE_EVENTS:
+      return payload
+
+    case FIND_EVENT:
       return payload
 
     case UPDATE_EVENT:

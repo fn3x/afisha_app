@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import {
-  retrieveEvents
+  retrieveEvents,
+  findByTitle,
+  deleteAllEvents
 } from "../../actions/events"
 import { Link } from "react-router-dom"
 
@@ -11,6 +13,7 @@ class EventsList extends Component {
     this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this)
     this.refreshData = this.refreshData.bind(this)
     this.findByTitle = this.findByTitle.bind(this)
+    this.removeAllEvents = this.removeAllEvents.bind(this)
 
     this.state = {
       currentEvent: null,
@@ -33,7 +36,7 @@ class EventsList extends Component {
 
   findByTitle() {
     this.props
-      .findByLogin(this.state.searchTitle)
+      .findByTitle(this.state.searchTitle)
       .then((response) => {
         console.log(response)
         this.refreshData()
@@ -57,6 +60,18 @@ class EventsList extends Component {
       currentEvent: event,
       currentIndex: index,
     })
+  }
+
+  removeAllEvents() {
+    this.props
+      .deleteAllEvents()
+      .then((response) => {
+        console.log(response)
+        this.refreshData()
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   render() {
@@ -86,7 +101,7 @@ class EventsList extends Component {
           </div>
         </div>
         <div className="col-md-12">
-          <h4>Users List</h4>
+          <h4>Events List</h4>
             <div className="card-deck">
               {events &&
                 events.map((event, index) => (
@@ -96,8 +111,8 @@ class EventsList extends Component {
                       key={index}
                       >
                       <h5 className="card-title">{event.title}</h5>
-                      <p className="card-text">Осталось билетов: {event.description}</p>
-                      <p className="card-text"><small className="text-muted">{event.available_tickets}</small></p>
+                      <p className="card-text">Описание: {event.description}</p>
+                      <p className="card-text"><small className="text-muted">Осталось билетов: {event.available_tickets}</small></p>
                       <Link
                         to={"/events/" + event.id}
                         className="badge badge-warning"
@@ -109,6 +124,12 @@ class EventsList extends Component {
                 ))}
             </div>
         </div>
+        <button
+            className="m-3 btn btn-sm btn-danger"
+            onClick={this.removeAllEvents}
+          >
+            Remove All
+          </button>
       </div>
     )
   }
@@ -122,6 +143,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-  retrieveEvents
+  retrieveEvents, findByTitle, deleteAllEvents
 })(EventsList)
 

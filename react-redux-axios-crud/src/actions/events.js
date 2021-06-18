@@ -1,6 +1,7 @@
 import {
   CREATE_EVENT,
   RETRIEVE_EVENTS,
+  FIND_EVENT,
   UPDATE_EVENT,
   DELETE_EVENT,
   DELETE_ALL_EVENTS
@@ -33,6 +34,21 @@ export const retrieveEvents = () => async (dispatch) => {
     })
   } catch (err) {
     console.log(err)
+  }
+}
+
+export const findByTitle = (title) => async (dispatch) => {
+  try {
+    const res = await EventsDataService.findByTitle(title)
+
+    dispatch({
+      type: FIND_EVENT,
+      payload: res.data,
+    })
+
+    return Promise.resolve(res.data)
+  } catch (err) {
+    return Promise.reject(err)
   }
 }
 

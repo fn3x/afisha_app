@@ -12,7 +12,7 @@ class EventsDataService {
   }
 
   findByTitle(title) {
-    return http.get(`${baseURL}/${title}`)
+    return http.get(`${baseURL}/bytitle/${title}`)
   }
 
   create(data) {

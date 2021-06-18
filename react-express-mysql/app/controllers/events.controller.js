@@ -6,7 +6,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new event
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -16,6 +16,7 @@ exports.create = (req, res) => {
   // Create an event
   const event = {
     title: req.body.title,
+    description: req.body.description,
     event_date: req.body.date,
     price: req.body.price,
     available_tickets: req.body.available_tickets,
@@ -64,6 +65,7 @@ exports.findByTitle = (req, res) => {
     }
   })
     .then(data => {
+      console.log(data)
       res.send(data);
     })
     .catch(err => {

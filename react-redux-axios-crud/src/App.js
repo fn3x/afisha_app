@@ -5,9 +5,10 @@ import "./App.css"
 
 import AddUser from "./components/Users/add-user.component"
 import User from "./components/Users/user.component"
+import UsersList from "./components/Users/users-list.component"
+import AddEvent from "./components/Events/add-event.component"
 import Event from "./components/Events/event.component"
 import EventsList from './components/Events/events-list.component'
-import UsersList from "./components/Users/users-list.component"
 
 class App extends Component {
   render() {
@@ -46,7 +47,7 @@ class App extends Component {
             <Route exact path="/users" component={UsersList} />
             <Route exact path="/events" component={EventsList} />
             <Route exact path="/users/add" component={AddUser} />
-            <Route exact path="/events/add" component={AddUser} />
+            <Route exact path="/events/add" component={AddEvent} />
             <Route path="/users/:id" component={User} />
             <Route path="/events/:id" component={Event} />
           </Switch>
