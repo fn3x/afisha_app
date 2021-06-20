@@ -31,7 +31,7 @@ class User extends Component {
   componentDidMount() {
     const { user } = this.props
 
-    this.getUser(this.props.match.params.id)
+    this.getUser(this.props.match.params.id || user.id)
 
     if (user) {
       this.setState({
@@ -129,8 +129,8 @@ class User extends Component {
 
     const showForm = currentUser.id === user.id
 
-    if (!currentUser && isAdmin) return <h5>User is not found.</h5>
-    if (!showForm && !isAdmin) return <h5>You don't have enough rights to view this page.</h5>
+    if (!currentUser && isAdmin) return <h5 className="text-center">User is not found.</h5>
+    if (!showForm && !isAdmin) return <h5 className="text-center">You don't have enough rights to view this page.</h5>
 
     const content = this.getUserInfo(currentUser)
 

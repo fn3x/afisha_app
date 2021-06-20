@@ -13,7 +13,6 @@ import EventsList from './components/Events/events-list.component'
 
 import Login from "./components/Auth/login.component"
 import Register from "./components/Auth/register.component"
-import Home from "./components/home.component"
 import Profile from "./components/Auth/profile.component"
 import BoardUser from "./components/board-user.component"
 import BoardAdmin from "./components/board-admin.component"
@@ -65,12 +64,6 @@ class App extends Component {
             Afisha
           </Link>
           <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
-              </Link>
-            </li>
-
             {showModeratorBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
@@ -89,8 +82,8 @@ class App extends Component {
 
             {currentUser && (
               <li className="nav-item">
-                <Link to={`/users/${currentUser.id}`} className="nav-link">
-                  User
+                <Link to={"/mypage"} className="nav-link">
+                  My account
                 </Link>
               </li>
             )}
@@ -126,15 +119,16 @@ class App extends Component {
           )}
         </nav>
 
-        <div className="container mt-3 d-flex justify-content-center">
+        <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path="/" component={EventsList} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardUser} />
             <Route path="/admin" component={BoardAdmin} />
+            <Route path="/mypage" component={User} />
             <Route path="/eventslist" component={EventsList} />
             <Route path="/userslist" component={UsersList} />
             <Route exact path="/users/add" component={AddUser} />

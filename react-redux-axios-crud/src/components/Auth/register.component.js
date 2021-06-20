@@ -130,7 +130,7 @@ class Register extends Component {
     const { message } = this.props;
 
     return (
-      <div className="col-md-6">
+      <div className="col-md-3" style={{ margin: "0 auto" }}>
         <Form
           onSubmit={this.handleRegister}
           ref={(c) => {

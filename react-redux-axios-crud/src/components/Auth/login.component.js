@@ -81,7 +81,7 @@ class Login extends Component {
     }
 
     return (
-      <div className="col-md-6">
+      <div className="col-md-3" style={{ margin: "0 auto" }}>
         <Form
           onSubmit={this.handleLogin}
           ref={(c) => {

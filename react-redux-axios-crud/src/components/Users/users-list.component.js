@@ -127,7 +127,7 @@ class UsersList extends Component {
             Remove All
           </button>
         </div>
-        <div className="col-md-6">
+        <div className="col-md-3">
           {currentUser ? (
             <div>
               <h4>User</h4>
