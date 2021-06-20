@@ -7,9 +7,9 @@ import {
   DELETE_ALL_USERS_EVENTS
 } from "./types"
 
-import UsersEventsDataService from "../services/users_events.service"
+import UsersEventsDataService from "../services/users_events_db.service"
 
-export const addEventToUser = (eventId, userId) => async (dispatch) => {
+export const addEventToUser = (userId, eventId) => async (dispatch) => {
   try {
     const res = await UsersEventsDataService.create(userId, eventId)
 

@@ -127,7 +127,7 @@ class UsersList extends Component {
             Remove All
           </button>
         </div>
-        <div className="col-md-6">
+        <div className="col-md-3">
           {currentUser ? (
             <div>
               <h4>User</h4>
@@ -148,12 +148,6 @@ class UsersList extends Component {
                   <strong>Phone:</strong>
                 </label>{" "}
                 {currentUser.phone}
-              </div>
-              <div>
-                <label>
-                  <strong>Admin:</strong>
-                </label>{" "}
-                {currentUser.is_admin ? "Yes" : "No"}
               </div>
 
               <Link

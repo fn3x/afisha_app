@@ -1,10 +1,14 @@
 import React, { Component } from "react"
+import { connect } from "react-redux"
 
-import EventsDataService from "../../services/events.service"
+import EventsDataService from "../../services/events_db.service"
+import { addEventToUser } from "../../actions/users_events"
 
 class Event extends Component {
   constructor(props) {
     super(props)
+
+    this.buyTicket = this.buyTicket.bind(this)
 
     this.state = {
       currentEvent: {
@@ -15,7 +19,8 @@ class Event extends Component {
         price: 0,
         scheme_url: "",
         location: "",
-      }
+      },
+      successful: false
     }
   }
 
@@ -29,7 +34,6 @@ class Event extends Component {
         this.setState({
           currentEvent: response.data,
         })
-        console.log(response.data)
       })
       .catch((e) => {
         console.log(e)
@@ -37,7 +41,7 @@ class Event extends Component {
   }
 
   render() {
-   const { currentEvent } = this.state
+   const { currentEvent, successful } = this.state
 
     return (
       <div className="card text-center mb-3" style={{ margin: '0 auto', width: '20rem' }}>
@@ -47,10 +51,40 @@ class Event extends Component {
           <p className="card-text text-left">Remaining tickets: {currentEvent.available_tickets}</p>
           <p className="card-text text-left">Location: {currentEvent.location}</p>
           <h5 className="card-text text-left">Price: {currentEvent.price}₽</h5>
+          {
+            successful ?
+            <h5 className="card-text text-center" style={{ color: 'green' }}>You have successfully bought ticket.</h5>
+            :
+            <div className="btn btn-primary" onClick={this.buyTicket} disabled={!currentEvent.available_tickets}>Buy ticket</div>
+          }
         </div>
       </div>
     )
   }
+
+  buyTicket() {
+    const { user, addEventToUser } = this.props
+    const { currentEvent } = this.state
+
+    addEventToUser(user.id, currentEvent.id)
+      .then((response) => {
+        console.log(`User ${response.user_id} bought ticket for event ${response.event_id}`)
+        this.setState({
+          successful: true
+        })
+        this.getEvent(response.event_id)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
 }
 
-export default Event
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  return {
+    user,
+  };
+}
+
+export default connect(mapStateToProps, { addEventToUser })(Event)

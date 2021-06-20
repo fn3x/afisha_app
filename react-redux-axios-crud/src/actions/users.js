@@ -7,7 +7,7 @@ import {
   DELETE_ALL_USERS
 } from "./types"
 
-import UsersDataService from "../services/users.service"
+import UsersDataService from "../services/users_db.service"
 
 export const createUser = (userInfo) => async (dispatch) => {
   try {

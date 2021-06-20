@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { updateUser, deleteUser } from "../../actions/users"
-import UsersDataService from "../../services/users.service"
+import UsersDataService from "../../services/users_db.service"
 
 class User extends Component {
   constructor(props) {
@@ -11,7 +11,6 @@ class User extends Component {
     this.onChangePassword = this.onChangePassword.bind(this)
     this.onChangeEmail = this.onChangeEmail.bind(this)
     this.getUser = this.getUser.bind(this)
-    this.updateAdminStatus = this.updateAdminStatus.bind(this)
     this.updateInfo = this.updateInfo.bind(this)
     this.removeUser = this.removeUser.bind(this)
 
@@ -22,15 +21,23 @@ class User extends Component {
         password: "",
         name: "",
         email: "",
-        phone: "",
-        is_admin: false,
+        phone: ""
       },
+      isAdmin: false,
       message: ""
     }
   }
 
   componentDidMount() {
-    this.getUser(this.props.match.params.id)
+    const { user } = this.props
+
+    this.getUser(this.props.match.params.id || user.id)
+
+    if (user) {
+      this.setState({
+        isAdmin: user.roles.includes("ROLE_ADMIN")
+      })
+    }
   }
 
   onChangeName(e) {
@@ -92,35 +99,6 @@ class User extends Component {
       })
   }
 
-  updateAdminStatus(status) {
-    var data = {
-      id: this.state.currentUser.id,
-      login: this.state.currentUser.login,
-      password: this.state.currentUser.password,
-      email: this.state.currentUser.email,
-      phone: this.state.currentUser.phone,
-      is_admin: status,
-    }
-
-    this.props
-      .updateUser(this.state.currentUser.id, data)
-      .then((reponse) => {
-        console.log(reponse)
-
-        this.setState((prevState) => ({
-          currentUser: {
-            ...prevState.currentUser,
-            is_admin: status,
-          },
-        }))
-
-        this.setState({ message: "The status was updated successfully!" })
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
-
   updateInfo() {
     this.props
       .updateUser(this.state.currentUser.id, this.state.currentUser)
@@ -138,7 +116,7 @@ class User extends Component {
     this.props
       .deleteUser(this.state.currentUser.id)
       .then(() => {
-        this.props.history.push("/users")
+        this.props.history.push("/userslist")
       })
       .catch((e) => {
         console.log(e)
@@ -146,115 +124,97 @@ class User extends Component {
   }
 
   render() {
-    const { currentUser } = this.state
+    const { currentUser, isAdmin } = this.state
+    const { user } = this.props
 
+    const showForm = currentUser.id === user.id
+
+    if (!currentUser && isAdmin) return <h5 className="text-center">User is not found.</h5>
+    if (!showForm && !isAdmin) return <h5 className="text-center">You don't have enough rights to view this page.</h5>
+
+    const content = this.getUserInfo(currentUser)
+
+    return content
+  }
+
+  getUserInfo(currentUser) {
     return (
-      <div>
-        {currentUser ? (
-          <div className="edit-form">
-            <h4>User</h4>
-            <form>
-              <div className="form-group">
-                <label htmlFor="title">Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={currentUser.name}
-                  onChange={this.onChangeName}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="login">Login</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="login"
-                  value={currentUser.login}
-                  onChange={this.onChangeLogin}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="password"
-                  value={currentUser.password}
-                  onChange={this.onChangePassword}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="email"
-                  value={currentUser.email}
-                  onChange={this.onChangeEmail}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="phone"
-                  value={currentUser.phone}
-                  onChange={this.onChangeEmail}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>
-                  <strong>Admin status:</strong>
-                </label>
-                {currentUser.is_admin ? " Yes" : " No"}
-              </div>
-            </form>
-
-            {currentUser.is_admin ? (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updateAdminStatus(false)}
-              >
-                Remove admin rights
-              </button>
-            ) : (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => this.updateAdminStatus(true)}
-              >
-                Grant admin rights
-              </button>
-            )}
-
-            <button
-              className="badge badge-danger mr-2"
-              onClick={this.removeUser}
-            >
-              Delete
-            </button>
-
-            <button
-              type="submit"
-              className="badge badge-success"
-              onClick={this.updateInfo}
-            >
-              Update
-            </button>
-            <p>{this.state.message}</p>
+      <div className="edit-form">
+        <h4>User</h4>
+        <form>
+          <div className="form-group">
+            <label htmlFor="title">Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="title"
+              value={currentUser.name}
+              onChange={this.onChangeName} />
           </div>
-        ) : (
-          <div>
-            <br />
-            <p>Please click on a user...</p>
+          <div className="form-group">
+            <label htmlFor="login">Login</label>
+            <input
+              type="text"
+              className="form-control"
+              id="login"
+              value={currentUser.login}
+              onChange={this.onChangeLogin} />
           </div>
-        )}
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="text"
+              className="form-control"
+              id="password"
+              value={currentUser.password}
+              onChange={this.onChangePassword} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              className="form-control"
+              id="email"
+              value={currentUser.email}
+              onChange={this.onChangeEmail} />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">Phone</label>
+            <input
+              type="text"
+              className="form-control"
+              id="phone"
+              value={currentUser.phone}
+              onChange={this.onChangeEmail} />
+          </div>
+        </form>
+
+        <button
+          className="badge badge-danger mr-2"
+          onClick={this.removeUser}
+        >
+          Delete
+        </button>
+
+        <button
+          type="submit"
+          className="badge badge-success"
+          onClick={this.updateInfo}
+        >
+          Update
+        </button>
+        <p>{this.state.message}</p>
       </div>
     )
   }
 }
 
-export default connect(null, { updateUser, deleteUser })(User)
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  return {
+    user,
+  };
+}
+
+export default connect(mapStateToProps, { updateUser, deleteUser })(User)

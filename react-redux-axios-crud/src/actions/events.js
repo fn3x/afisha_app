@@ -7,7 +7,7 @@ import {
   DELETE_ALL_EVENTS
 } from "./types"
 
-import EventsDataService from "../services/events.service"
+import EventsDataService from "../services/events_db.service"
 
 export const createEvent = (eventInfo) => async (dispatch) => {
   try {
