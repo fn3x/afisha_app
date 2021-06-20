@@ -11,7 +11,6 @@ class User extends Component {
     this.onChangePassword = this.onChangePassword.bind(this)
     this.onChangeEmail = this.onChangeEmail.bind(this)
     this.getUser = this.getUser.bind(this)
-    this.updateAdminStatus = this.updateAdminStatus.bind(this)
     this.updateInfo = this.updateInfo.bind(this)
     this.removeUser = this.removeUser.bind(this)
 
@@ -24,12 +23,21 @@ class User extends Component {
         email: "",
         phone: ""
       },
+      isAdmin: false,
       message: ""
     }
   }
 
   componentDidMount() {
+    const { user } = this.props
+
     this.getUser(this.props.match.params.id)
+
+    if (user) {
+      this.setState({
+        isAdmin: user.roles.includes("ROLE_ADMIN")
+      })
+    }
   }
 
   onChangeName(e) {
@@ -108,7 +116,7 @@ class User extends Component {
     this.props
       .deleteUser(this.state.currentUser.id)
       .then(() => {
-        this.props.history.push("/users")
+        this.props.history.push("/userslist")
       })
       .catch((e) => {
         console.log(e)
@@ -116,11 +124,14 @@ class User extends Component {
   }
 
   render() {
-    const { currentUser } = this.state
+    const { currentUser, isAdmin } = this.state
+    const { user } = this.props
+
+    const showForm = currentUser && (isAdmin || currentUser.id === user.id)
 
     return (
       <div>
-        {currentUser ? (
+        {showForm ? (
           <div className="edit-form">
             <h4>User</h4>
             <form>
@@ -196,7 +207,7 @@ class User extends Component {
         ) : (
           <div>
             <br />
-            <p>Please click on a user...</p>
+            <p>You tried to view someone's private information. That is restricted.</p>
           </div>
         )}
       </div>
@@ -204,4 +215,11 @@ class User extends Component {
   }
 }
 
-export default connect(null, { updateUser, deleteUser })(User)
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  return {
+    user,
+  };
+}
+
+export default connect(mapStateToProps, { updateUser, deleteUser })(User)

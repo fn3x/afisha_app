@@ -16,8 +16,7 @@ import Register from "./components/Auth/register.component"
 import Home from "./components/home.component"
 import Profile from "./components/Auth/profile.component"
 import BoardUser from "./components/board-user.component"
-// import BoardModerator from "./components/board-moderator.component"
-// import BoardAdmin from "./components/board-admin.component"
+import BoardAdmin from "./components/board-admin.component"
 
 import { logout } from "./actions/auth"
 import { clearMessage } from "./actions/messages"
@@ -90,7 +89,7 @@ class App extends Component {
 
             {currentUser && (
               <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
+                <Link to={`/users/${currentUser.id}`} className="nav-link">
                   User
                 </Link>
               </li>
@@ -127,7 +126,7 @@ class App extends Component {
           )}
         </nav>
 
-        <div className="container mt-3">
+        <div className="container mt-3 d-flex justify-content-center">
           <Switch>
             <Route exact path={["/", "/home"]} component={Home} />
             <Route exact path="/login" component={Login} />
@@ -135,7 +134,13 @@ class App extends Component {
             <Route exact path="/profile" component={Profile} />
             <Route path="/user" component={BoardUser} />
             <Route path="/mod" component={BoardUser} />
-            <Route path="/admin" component={BoardUser} />
+            <Route path="/admin" component={BoardAdmin} />
+            <Route path="/eventslist" component={EventsList} />
+            <Route path="/userslist" component={UsersList} />
+            <Route exact path="/users/add" component={AddUser} />
+            <Route exact path="/events/add" component={AddEvent} />
+            <Route path="/users/:id" component={User} />
+            <Route path="/events/:id" component={Event} />
           </Switch>
         </div>
       </Router>
