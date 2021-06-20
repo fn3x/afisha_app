@@ -127,89 +127,84 @@ class User extends Component {
     const { currentUser, isAdmin } = this.state
     const { user } = this.props
 
-    const showForm = currentUser && (isAdmin || currentUser.id === user.id)
+    const showForm = currentUser.id === user.id
 
+    if (!currentUser && isAdmin) return <h5>User is not found.</h5>
+    if (!showForm && !isAdmin) return <h5>You don't have enough rights to view this page.</h5>
+
+    const content = this.getUserInfo(currentUser)
+
+    return content
+  }
+
+  getUserInfo(currentUser) {
     return (
-      <div>
-        {showForm ? (
-          <div className="edit-form">
-            <h4>User</h4>
-            <form>
-              <div className="form-group">
-                <label htmlFor="title">Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  value={currentUser.name}
-                  onChange={this.onChangeName}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="login">Login</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="login"
-                  value={currentUser.login}
-                  onChange={this.onChangeLogin}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="password"
-                  value={currentUser.password}
-                  onChange={this.onChangePassword}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="email"
-                  value={currentUser.email}
-                  onChange={this.onChangeEmail}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="phone"
-                  value={currentUser.phone}
-                  onChange={this.onChangeEmail}
-                />
-              </div>
-            </form>
-
-            <button
-              className="badge badge-danger mr-2"
-              onClick={this.removeUser}
-            >
-              Delete
-            </button>
-
-            <button
-              type="submit"
-              className="badge badge-success"
-              onClick={this.updateInfo}
-            >
-              Update
-            </button>
-            <p>{this.state.message}</p>
+      <div className="edit-form">
+        <h4>User</h4>
+        <form>
+          <div className="form-group">
+            <label htmlFor="title">Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="title"
+              value={currentUser.name}
+              onChange={this.onChangeName} />
           </div>
-        ) : (
-          <div>
-            <br />
-            <p>You tried to view someone's private information. That is restricted.</p>
+          <div className="form-group">
+            <label htmlFor="login">Login</label>
+            <input
+              type="text"
+              className="form-control"
+              id="login"
+              value={currentUser.login}
+              onChange={this.onChangeLogin} />
           </div>
-        )}
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="text"
+              className="form-control"
+              id="password"
+              value={currentUser.password}
+              onChange={this.onChangePassword} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              className="form-control"
+              id="email"
+              value={currentUser.email}
+              onChange={this.onChangeEmail} />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">Phone</label>
+            <input
+              type="text"
+              className="form-control"
+              id="phone"
+              value={currentUser.phone}
+              onChange={this.onChangeEmail} />
+          </div>
+        </form>
+
+        <button
+          className="badge badge-danger mr-2"
+          onClick={this.removeUser}
+        >
+          Delete
+        </button>
+
+        <button
+          type="submit"
+          className="badge badge-success"
+          onClick={this.updateInfo}
+        >
+          Update
+        </button>
+        <p>{this.state.message}</p>
       </div>
     )
   }
