@@ -16,7 +16,7 @@ class UsersEventsDataService {
   }
 
   create(userId, eventId) {
-    return http.get(`${baseURL}/user/${userId}/eventId/${eventId}`)
+    return http.get(`${baseURL}/userId/${userId}/eventId/${eventId}`)
   }
 
   update(id, data) {
