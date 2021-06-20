@@ -13,7 +13,6 @@ class EventsList extends Component {
     this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this)
     this.refreshData = this.refreshData.bind(this)
     this.findByTitle = this.findByTitle.bind(this)
-    this.removeAllEvents = this.removeAllEvents.bind(this)
 
     this.state = {
       currentEvent: null,
@@ -62,21 +61,9 @@ class EventsList extends Component {
     })
   }
 
-  removeAllEvents() {
-    this.props
-      .deleteAllEvents()
-      .then((response) => {
-        console.log(response)
-        this.refreshData()
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
-
   render() {
     const { searchTitle } = this.state
-    const { events } = this.props
+    const { events, user } = this.props
 
     return (
       <div className="list row">
@@ -97,6 +84,17 @@ class EventsList extends Component {
               >
                 Search
               </button>
+              {
+                user.roles.includes("ROLE_ADMIN") &&
+                <Link to={"/events/add"}>
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                  >
+                    Add event
+                  </button>
+                </Link>
+              }
             </div>
           </div>
         </div>
@@ -111,25 +109,19 @@ class EventsList extends Component {
                       key={index}
                       >
                       <h5 className="card-title">{event.title}</h5>
-                      <p className="card-text">Описание: {event.description}</p>
-                      <p className="card-text"><small className="text-muted">Осталось билетов: {event.available_tickets}</small></p>
+                      <p className="card-text">Description: {event.description}</p>
+                      <p className="card-text text-muted">Tickets: {event.available_tickets}</p>
                       <Link
                         to={"/events/" + event.id}
                         className="badge badge-warning"
                       >
-                        Подробнее
+                        More
                       </Link>
                     </div>
                   </div>
                 ))}
             </div>
         </div>
-        <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllEvents}
-          >
-            Remove All
-          </button>
       </div>
     )
   }
@@ -137,8 +129,10 @@ class EventsList extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { user } = state.auth;
   return {
     events: state.events,
+    user
   }
 }
 

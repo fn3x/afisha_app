@@ -15,7 +15,7 @@ module.exports = app => {
   router.get("/:id", events.findOne);
 
   // Update a event with id
-  router.put("/:id", events.update);
+  router.put("/", events.update);
 
   // Delete a event with id
   router.delete("/:id", events.delete);

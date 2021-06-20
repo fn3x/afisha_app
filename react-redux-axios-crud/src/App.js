@@ -8,6 +8,7 @@ import AddUser from "./components/Users/add-user.component"
 import User from "./components/Users/user.component"
 import UsersList from "./components/Users/users-list.component"
 import AddEvent from "./components/Events/add-event.component"
+import ChangeEvent from "./components/Events/change-event.component"
 import Event from "./components/Events/event.component"
 import EventsList from './components/Events/events-list.component'
 
@@ -98,7 +99,7 @@ class App extends Component {
               </li>
               <li className="nav-item">
                 <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
+                  Log out
                 </a>
               </li>
             </div>
@@ -112,7 +113,7 @@ class App extends Component {
 
               <li className="nav-item">
                 <Link to={"/register"} className="nav-link">
-                  Sign Up
+                  Sign up
                 </Link>
               </li>
             </div>
@@ -133,6 +134,7 @@ class App extends Component {
             <Route path="/userslist" component={UsersList} />
             <Route exact path="/users/add" component={AddUser} />
             <Route exact path="/events/add" component={AddEvent} />
+            <Route exact path="/events/change/:id" component={ChangeEvent} />
             <Route path="/users/:id" component={User} />
             <Route path="/events/:id" component={Event} />
           </Switch>

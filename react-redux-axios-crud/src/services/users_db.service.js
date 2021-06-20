@@ -16,7 +16,6 @@ class UsersDataService {
   }
 
   create(data) {
-    console.log(data)
     return http.post(baseURL, data)
   }
 

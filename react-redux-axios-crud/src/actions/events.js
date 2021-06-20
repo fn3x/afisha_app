@@ -52,9 +52,9 @@ export const findByTitle = (title) => async (dispatch) => {
   }
 }
 
-export const updateEvent = (id, data) => async (dispatch) => {
+export const updateEvent = (data) => async (dispatch) => {
   try {
-    const res = await EventsDataService.update(id, data)
+    const res = await EventsDataService.update(data)
 
     dispatch({
       type: UPDATE_EVENT,

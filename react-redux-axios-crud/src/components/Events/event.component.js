@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import { Link } from "react-router-dom"
 
 import EventsDataService from "../../services/events_db.service"
 import { addEventToUser } from "../../actions/users_events"
@@ -55,7 +56,7 @@ class Event extends Component {
             successful ?
             <h5 className="card-text text-center" style={{ color: 'green' }}>You have successfully bought ticket.</h5>
             :
-            <div className="btn btn-primary" onClick={this.buyTicket} disabled={!currentEvent.available_tickets}>Buy ticket</div>
+            this.renderFooter()
           }
         </div>
       </div>
@@ -77,6 +78,25 @@ class Event extends Component {
       .catch((e) => {
         console.log(e)
       })
+  }
+
+  renderFooter() {
+    const { user } = this.props
+    const { currentEvent } = this.state
+
+    const button = user.roles.includes("ROLE_ADMIN") ?
+      <Link to={`/events/change/${currentEvent.id}`}>
+        <button
+          className="btn btn-primary"
+          type="button"
+        >
+          Change event
+        </button>
+      </Link>
+      :
+      <div className="btn btn-primary" onClick={this.buyTicket} disabled={!currentEvent.available_tickets}>Buy ticket</div>
+
+    return button
   }
 }
 

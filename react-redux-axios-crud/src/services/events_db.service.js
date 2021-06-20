@@ -19,8 +19,8 @@ class EventsDataService {
     return http.post(baseURL, data)
   }
 
-  update(id, data) {
-    return http.put(`${baseURL}/${id}`, data)
+  update(data) {
+    return http.put(`${baseURL}`, data)
   }
 
   delete(id) {

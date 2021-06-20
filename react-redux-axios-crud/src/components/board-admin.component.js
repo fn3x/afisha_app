@@ -6,7 +6,7 @@ export default class BoardAdmin extends Component {
   render() {
     return (
       <div className="container">
-        <div class="cards" style={{ display: 'flex', gap: '2rem', justifyContent: 'center'}}>
+        <div className="cards" style={{ display: 'flex', gap: '2rem', justifyContent: 'center'}}>
           <div className="card" style={{ width: "18rem"}}>
             <div className="card-body">
               <h5 className="card-title">Events list</h5>

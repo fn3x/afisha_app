@@ -93,19 +93,20 @@ exports.findOne = (req, res) => {
 
 // Update an event by the id in the request
 exports.update = (req, res) => {
-  const id = req.params.id;
+  const id = req.body.id;
   const data = Object.assign(req.body, {
     updated_at: moment().format()
   })
 
   Events.update(data, {
-    where: { id: id }
+    where: { id }
   })
     .then(num => {
       if (num == 1) {
-        res.send({
-          message: "Event was updated successfully."
-        });
+        Events.findByPk(id)
+          .then(data => {
+            res.send(data);
+          })
       } else {
         res.send({
           message: `Cannot update event with id=${id}. Maybe event was not found or req.body is empty!`

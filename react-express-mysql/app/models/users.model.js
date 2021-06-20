@@ -14,12 +14,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     email: {
       type: Sequelize.INTEGER(45)
-    },
-    created_at: {
-      type: Sequelize.DATE
-    },
-    updated_at: {
-      type: Sequelize.DATE
     }
   }, { underscored: true });
 
