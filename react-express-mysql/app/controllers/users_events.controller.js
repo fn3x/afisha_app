@@ -1,4 +1,3 @@
-const moment = require('moment');
 const db = require("../models");
 const Events = db.events;
 const Users = db.users;
@@ -8,14 +7,21 @@ const Op = db.Sequelize.Op;
 exports.create = (req, res) => {
   const usersEvent = {
     user_id: req.params.userId,
-    event_id: req.params.eventId,
-    createdAt: moment().format(),
-    updatedAt: moment().format()
+    event_id: req.params.eventId
   };
 
   UsersEvents.create(usersEvent)
-    .then(data => {
-      res.send(data);
+    .then(response => {
+      Events.findByPk(usersEvent.event_id)
+        .then(event => {
+          const updatedData = {...event, available_tickets: (event.available_tickets - 1) }
+
+          Events.update(updatedData, {
+            where: { id: usersEvent.event_id }
+          })
+
+          res.status(200).send(response);
+        })
     })
     .catch(err => {
       res.status(500).send({

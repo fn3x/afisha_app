@@ -1,4 +1,3 @@
-const moment = require('moment');
 const db = require("../models");
 const Events = db.events;
 const Op = db.Sequelize.Op;
@@ -21,9 +20,7 @@ exports.create = (req, res) => {
     price: req.body.price,
     available_tickets: req.body.available_tickets,
     scheme_url: req.body.scheme_url,
-    location: req.body.location,
-    createdAt: moment().format(),
-    updatedAt: moment().format()
+    location: req.body.location
   };
 
   // Save event in the database
@@ -94,11 +91,8 @@ exports.findOne = (req, res) => {
 // Update an event by the id in the request
 exports.update = (req, res) => {
   const id = req.body.id;
-  const data = Object.assign(req.body, {
-    updated_at: moment().format()
-  })
 
-  Events.update(data, {
+  Events.update(req.body, {
     where: { id }
   })
     .then(num => {

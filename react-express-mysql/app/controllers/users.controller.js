@@ -1,7 +1,5 @@
-const moment = require('moment');
 const db = require("../models");
 const Users = db.users;
-const Op = db.Sequelize.Op;
 
 // Create and Save a new user
 exports.create = (req, res) => {
@@ -18,9 +16,7 @@ exports.create = (req, res) => {
     password: req.body.password,
     name: req.body.name,
     phone: req.body.phone,
-    email: req.body.email,
-    createdAt: moment().format(),
-    updatedAt: moment().format()
+    email: req.body.email
   };
 
   // Save user in the database
@@ -88,11 +84,8 @@ exports.findByLogin = (req, res) => {
 // Update user by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
-  const data = Object.assign(req.body, {
-    updated_at: moment().format()
-  })
 
-  Users.update(data, {
+  Users.update(req.body, {
     where: { id: id }
   })
     .then(num => {

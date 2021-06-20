@@ -94,7 +94,7 @@ class Event extends Component {
         </button>
       </Link>
       :
-      <div className="btn btn-primary" onClick={this.buyTicket} disabled={!currentEvent.available_tickets}>Buy ticket</div>
+      <button className="btn btn-primary" onClick={this.buyTicket} disabled={!currentEvent.available_tickets}>Buy ticket</button>
 
     return button
   }
