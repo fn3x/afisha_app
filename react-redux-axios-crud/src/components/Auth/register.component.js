@@ -157,7 +157,7 @@ class Register extends Component {
                     name="username"
                     value={this.state.username}
                     onChange={this.onChangeUsername}
-                    validations={[required, vusername]}
+                    validations={[vusername]}
                   />
                 </div>
 

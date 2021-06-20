@@ -22,19 +22,19 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
-    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeLogin = this.onChangeLogin.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
-      username: "",
+      login: "",
       password: "",
       loading: false,
     };
   }
 
-  onChangeUsername(e) {
+  onChangeLogin(e) {
     this.setState({
-      username: e.target.value,
+      login: e.target.value,
     });
   }
 
@@ -56,7 +56,7 @@ class Login extends Component {
     const { dispatch, history } = this.props;
 
     if (this.checkBtn.context._errors.length === 0) {
-      dispatch(login(this.state.username, this.state.password))
+      dispatch(login(this.state.login, this.state.password))
         .then(() => {
           history.push("/profile");
           window.location.reload();
@@ -96,13 +96,13 @@ class Login extends Component {
             }}
           >
             <div className="form-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="login">Login</label>
               <Input
                 type="text"
                 className="form-control"
-                name="username"
+                name="login"
                 value={this.state.username}
-                onChange={this.onChangeUsername}
+                onChange={this.onChangeLogin}
                 validations={[required]}
               />
             </div>
