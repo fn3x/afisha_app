@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
+import moment from 'moment'
 
 import EventsDataService from "../../services/events_db.service"
 import { addEventToUser } from "../../actions/users_events"
@@ -49,7 +50,7 @@ class Event extends Component {
         <div className="card-body">
           <h5 className="card-title">{currentEvent.title}</h5>
           <p className="card-text text-left">Description: {currentEvent.description}</p>
-          <p className="card-text text-left">Date: {currentEvent.event_date}</p>
+          <p className="card-text text-left">Date: {moment.parseZone(currentEvent.event_date).format("LLL")}</p>
           <p className="card-text text-left">Remaining tickets: {currentEvent.available_tickets}</p>
           <p className="card-text text-left">Location: {currentEvent.location}</p>
           <h5 className="card-text text-left">Price: {currentEvent.price}₽</h5>

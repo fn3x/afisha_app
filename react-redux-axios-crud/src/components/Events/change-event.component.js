@@ -4,9 +4,8 @@ import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 
-
 import EventsDataService from "../../services/events_db.service"
-import { updateEvent } from "../../actions/events"
+import { createEvent, updateEvent } from "../../actions/events"
 
 class ChangeEvent extends Component {
   constructor(props) {
@@ -31,15 +30,22 @@ class ChangeEvent extends Component {
         scheme_url: "",
         location: ""
       },
+      shouldUpdate: false,
       submitted: false,
       isAdmin: false
     }
   }
 
   componentDidMount() {
-    const { user } = this.props
+    const { user, match } = this.props
 
-    this.getEvent(this.props.match.params.id)
+    if (match.path.includes("change")) {
+      this.getEvent(this.props.match.params.id)
+
+      this.setState({
+        shouldUpdate: true
+      })
+    }
 
     if (user) {
       this.setState({
@@ -124,10 +130,13 @@ class ChangeEvent extends Component {
   }
 
   saveEvent() {
-    const { currentEvent } = this.state
-    const { updateEvent } = this.props
+    const { currentEvent, shouldUpdate } = this.state
+    const { createEvent, updateEvent } = this.props
 
-    updateEvent({ ...currentEvent, event_date: moment(currentEvent.event_date).toDate() })
+    const eventObj = { ...currentEvent, event_date: moment(currentEvent.event_date).toDate() }
+
+    if (shouldUpdate) {
+      return updateEvent(eventObj)
       .then((response) => {
         this.setState({
           currentEvent: response,
@@ -137,20 +146,18 @@ class ChangeEvent extends Component {
       .catch((e) => {
         console.log(e)
       })
-  }
+    }
 
-  newEvent() {
-    this.setState({
-      title: "",
-      description: "",
-      event_date: "",
-      price: 0,
-      available_tickets: 0,
-      scheme_url: "",
-      location: "",
-
-      submitted: false
-    })
+    return createEvent(eventObj)
+      .then((response) => {
+        this.setState({
+          currentEvent: response,
+          submitted: true
+        })
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   getEvent(id) {
@@ -220,17 +227,20 @@ class ChangeEvent extends Component {
 
             <div className="form-group datepicker" inline="true">
               <label htmlFor="event_date">Event Date</label>
-              <DatePicker
-                    className="form-control"
-                    selected={ moment.parseZone(event_date).toDate() }
-                    onChange={ this.onChangeEventDate }
-                    name="selectDate"
-                    showTimeSelect
-                    timeIntervals={30}
-                    timeFormat="HH:mm"
-                    timeCaption="time"
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                />
+              <p>
+                <DatePicker
+                      className="form-control"
+                      selected={moment.parseZone(event_date).toDate()}
+                      onChange={this.onChangeEventDate}
+                      minDate={moment().toDate()}
+                      name="selectDate"
+                      showTimeSelect
+                      timeIntervals={30}
+                      timeFormat="HH:mm"
+                      timeCaption="time"
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                  />
+              </p>
             </div>
 
             <div className="form-group">
@@ -302,4 +312,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { updateEvent })(ChangeEvent)
+export default connect(mapStateToProps, { createEvent, updateEvent })(ChangeEvent)
