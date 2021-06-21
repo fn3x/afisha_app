@@ -84,7 +84,7 @@ exports.findByUserId = (req, res) => {
   })
     .then(usersEvents => {
       userInfo = Object.assign({}, usersEvents)[0]?.user?.dataValues
-      // if (!userInfo) return []
+      if (!userInfo) return []
 
       return {
         id: userInfo.id,
