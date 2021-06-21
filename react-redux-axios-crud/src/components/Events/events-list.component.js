@@ -96,10 +96,7 @@ class EventsList extends Component {
               {
                 user && user.roles.includes("ROLE_ADMIN") &&
                 <Link to={"/events/add"}>
-                  <button
-                    className="btn btn-outline-secondary"
-                    type="button"
-                  >
+                  <button className="btn btn-outline-secondary" type="button">
                     Add event
                   </button>
                 </Link>
@@ -113,20 +110,12 @@ class EventsList extends Component {
               {events &&
                 events.map((event, index) => (
                   <div className="card">
-                    <div
-                      className="card-body"
-                      key={index}
-                      >
+                    <div className="card-body" key={index}>
                       <h5 className="card-title">{event.title}</h5>
                       <p className="card-text">Description: {event.description}</p>
                       <p className="card-text text-muted">Tickets: {event.available_tickets}</p>
                       <div class="buttons" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                        <Link
-                          to={"/events/" + event.id}
-                          className="btn btn-warning"
-                        >
-                          More
-                        </Link>
+                        <Link to={"/events/" + event.id} className="btn btn-success">More</Link>
                         {
                           user.roles.includes("ROLE_ADMIN") &&
                           <button
