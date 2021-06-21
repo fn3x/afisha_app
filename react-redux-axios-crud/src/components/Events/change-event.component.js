@@ -134,9 +134,8 @@ class ChangeEvent extends Component {
     const { currentEvent, shouldUpdate } = this.state
     const { createEvent, updateEvent } = this.props
 
-    const eventObj = { ...currentEvent, event_date: moment(currentEvent.event_date).toDate() }
-
     if (shouldUpdate) {
+      const eventObj = { ...currentEvent, event_date: moment(currentEvent.event_date).format("YYYY-MM-DD HH:mm:ss") }
       return updateEvent(eventObj)
       .then((response) => {
         this.setState({
@@ -149,6 +148,7 @@ class ChangeEvent extends Component {
       })
     }
 
+    const eventObj = { ...currentEvent, event_date: moment(currentEvent.event_date).format("YYYY-MM-DD HH:mm:ss") }
     return createEvent(eventObj)
       .then((response) => {
         this.setState({
@@ -236,7 +236,7 @@ class ChangeEvent extends Component {
               <p>
                 <DatePicker
                       className="form-control"
-                      selected={moment.parseZone(event_date).toDate()}
+                      selected={moment(event_date).toDate()}
                       onChange={this.onChangeEventDate}
                       minDate={moment().toDate()}
                       name="selectDate"
@@ -244,7 +244,7 @@ class ChangeEvent extends Component {
                       timeIntervals={30}
                       timeFormat="HH:mm"
                       timeCaption="time"
-                      dateFormat="MMMM d, yyyy h:mm aa"
+                      dateFormat="MMMM d, yyyy H:mm"
                   />
               </p>
             </div>

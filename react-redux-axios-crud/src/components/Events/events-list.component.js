@@ -3,7 +3,8 @@ import { connect } from "react-redux"
 import {
   retrieveEvents,
   findByTitle,
-  deleteAllEvents
+  deleteAllEvents,
+  deleteEvent
 } from "../../actions/events"
 import { Link } from "react-router-dom"
 
@@ -13,6 +14,7 @@ class EventsList extends Component {
     this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this)
     this.refreshData = this.refreshData.bind(this)
     this.findByTitle = this.findByTitle.bind(this)
+    this.deleteEvent = this.deleteEvent.bind(this)
 
     this.state = {
       currentEvent: null,
@@ -58,6 +60,14 @@ class EventsList extends Component {
       currentEvent: event,
       currentIndex: index,
     })
+  }
+
+  deleteEvent(eventId) {
+    const { deleteEvent, retrieveEvents } = this.props
+
+    deleteEvent(eventId)
+      .then(retrieveEvents())
+      .catch(err => console.error(err.message))
   }
 
   render() {
@@ -110,12 +120,24 @@ class EventsList extends Component {
                       <h5 className="card-title">{event.title}</h5>
                       <p className="card-text">Description: {event.description}</p>
                       <p className="card-text text-muted">Tickets: {event.available_tickets}</p>
-                      <Link
-                        to={"/events/" + event.id}
-                        className="badge badge-warning"
-                      >
-                        More
-                      </Link>
+                      <div class="buttons" style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                        <Link
+                          to={"/events/" + event.id}
+                          className="btn btn-warning"
+                        >
+                          More
+                        </Link>
+                        {
+                          user.roles.includes("ROLE_ADMIN") &&
+                          <button
+                            className="btn btn-danger"
+                            type="button"
+                            onClick={() => this.deleteEvent(event.id)}
+                          >
+                            Delete
+                          </button>
+                        }
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -136,6 +158,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-  retrieveEvents, findByTitle, deleteAllEvents
+  retrieveEvents, findByTitle, deleteAllEvents, deleteEvent
 })(EventsList)
 

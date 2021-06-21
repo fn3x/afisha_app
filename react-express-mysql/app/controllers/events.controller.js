@@ -16,7 +16,7 @@ exports.create = (req, res) => {
   const event = {
     title: req.body.title,
     description: req.body.description,
-    event_date: req.body.date,
+    event_date: req.body.event_date,
     price: req.body.price,
     available_tickets: req.body.available_tickets,
     scheme_url: req.body.scheme_url,

@@ -17,7 +17,7 @@ class Event extends Component {
         id: null,
         title: "",
         description: "",
-        event_date: "",
+        event_date: undefined,
         price: 0,
         scheme_url: "",
         location: "",
@@ -50,7 +50,7 @@ class Event extends Component {
         <div className="card-body">
           <h5 className="card-title">{currentEvent.title}</h5>
           <p className="card-text text-left">Description: {currentEvent.description}</p>
-          <p className="card-text text-left">Date: {moment.parseZone(currentEvent.event_date).format("LLL")}</p>
+          <p className="card-text text-left">Date: {moment(currentEvent.event_date).format("LLL")}</p>
           <p className="card-text text-left">Remaining tickets: {currentEvent.available_tickets}</p>
           <p className="card-text text-left">Location: {currentEvent.location}</p>
           <h5 className="card-text text-left">Price: {currentEvent.price}₽</h5>

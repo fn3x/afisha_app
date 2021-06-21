@@ -20,7 +20,7 @@ class EventsDataService {
   }
 
   update(data) {
-    return http.put(`${baseURL}`, data)
+    return http.put(baseURL, data)
   }
 
   delete(id) {
