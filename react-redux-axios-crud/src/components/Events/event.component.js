@@ -11,6 +11,7 @@ class Event extends Component {
     super(props)
 
     this.buyTicket = this.buyTicket.bind(this)
+    this.getPriceWithDiscount = this.getPriceWithDiscount.bind(this)
 
     this.state = {
       currentEvent: {
@@ -43,7 +44,8 @@ class Event extends Component {
   }
 
   render() {
-   const { currentEvent, successful } = this.state
+    const { currentEvent, successful } = this.state
+    const { user: { discountValue } } = this.props
 
     return (
       <div className="card text-center mb-3" style={{ margin: '0 auto', width: '20rem' }}>
@@ -53,7 +55,9 @@ class Event extends Component {
           <p className="card-text text-left">Date: {moment(currentEvent.event_date).format("LLL")}</p>
           <p className="card-text text-left">Remaining tickets: {currentEvent.available_tickets}</p>
           <p className="card-text text-left">Location: {currentEvent.location}</p>
-          <h5 className="card-text text-left">Price: {currentEvent.price}₽</h5>
+          <h5 className="card-text text-left">
+            {`Price${discountValue > 0 ? `(with discount ${discountValue}%)` : ''}: ${currentEvent.price ? this.getPriceWithDiscount(currentEvent.price, discountValue) : 0}₽`}
+          </h5>
           {
             successful ?
             <>
@@ -75,6 +79,10 @@ class Event extends Component {
     )
   }
 
+  getPriceWithDiscount(price, discountValue) {
+    return price - (price * (discountValue / 100))
+  }
+
   buyTicket() {
     const { user, addEventToUser } = this.props
     const { currentEvent } = this.state
@@ -94,12 +102,12 @@ class Event extends Component {
 
   renderFooter() {
     const { user } = this.props
-    const { currentEvent } = this.state
+    const { currentEvent: { id, available_tickets} } = this.state
 
     if (!user) return null
     
     const button = user.roles.includes("ROLE_ADMIN") ?
-      <Link to={`/events/change/${currentEvent.id}`}>
+      <Link to={`/events/change/${id}`}>
         <button
           className="btn btn-primary"
           type="button"
@@ -108,7 +116,7 @@ class Event extends Component {
         </button>
       </Link>
       :
-      <button className="btn btn-primary" onClick={this.buyTicket} disabled={!currentEvent.available_tickets}>Buy ticket</button>
+      <button className="btn btn-primary" onClick={this.buyTicket} disabled={!available_tickets || available_tickets < 0}>Buy ticket</button>
 
     return button
   }

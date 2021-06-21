@@ -3,9 +3,6 @@ module.exports = (sequelize, Sequelize) => {
     user_id: {
       type: Sequelize.INTEGER
     },
-    privilege_id: {
-      type: Sequelize.INTEGER
-    },
     event_id: {
       type: Sequelize.INTEGER
     }

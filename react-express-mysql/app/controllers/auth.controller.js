@@ -27,17 +27,10 @@ exports.signup = (req, res) => {
           }
         }).then(roles => {
           user.setRoles(roles).then(() => {
-            Privilege.findAll({
-              where: {
-                name: req.body.category
-              }
-            }).then((privileges) => {
-              console.log(privileges)
-              user.setPrivileges(privileges)
-                .then(() => {
-                  res.send({ message: "User was registered successfully!" })
-                })
-            })
+            user.setPrivileges([0])
+              .then(() => {
+                res.send({ message: "User was registered successfully!" })
+              })
           });
         });
       } else {
@@ -48,7 +41,6 @@ exports.signup = (req, res) => {
                 name: req.body.category
               }
             }).then((privileges) => {
-              console.log(privileges)
               user.setPrivileges(privileges)
                 .then(() => {
                   res.send({ message: "User was registered successfully!" })
