@@ -49,12 +49,23 @@ class Event extends Component {
         <div className="card-body">
           <h5 className="card-title">{currentEvent.title}</h5>
           <p className="card-text text-left">Description: {currentEvent.description}</p>
+          <p className="card-text text-left">Date: {currentEvent.event_date}</p>
           <p className="card-text text-left">Remaining tickets: {currentEvent.available_tickets}</p>
           <p className="card-text text-left">Location: {currentEvent.location}</p>
           <h5 className="card-text text-left">Price: {currentEvent.price}₽</h5>
           {
             successful ?
-            <h5 className="card-text text-center" style={{ color: 'green' }}>You have successfully bought ticket.</h5>
+            <>
+              <h5 className="card-text text-center" style={{ color: 'green' }}>You have successfully bought ticket.</h5>
+              <Link to={"/mypage"}>
+                <button
+                  className="btn btn-info"
+                  type="button"
+                >
+                  View my tickets
+                </button>
+              </Link>
+            </>
             :
             this.renderFooter()
           }
@@ -84,6 +95,8 @@ class Event extends Component {
     const { user } = this.props
     const { currentEvent } = this.state
 
+    if (!user) return null
+    
     const button = user.roles.includes("ROLE_ADMIN") ?
       <Link to={`/events/change/${currentEvent.id}`}>
         <button

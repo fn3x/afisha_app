@@ -1,5 +1,9 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import moment from 'moment'
+import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
+
 
 import EventsDataService from "../../services/events_db.service"
 import { updateEvent } from "../../actions/events"
@@ -21,7 +25,7 @@ class ChangeEvent extends Component {
         id: null,
         title: "",
         description: "",
-        eventDate: undefined,
+        event_date: undefined,
         price: 0.00,
         available_tickets: 0,
         scheme_url: "",
@@ -38,7 +42,6 @@ class ChangeEvent extends Component {
     this.getEvent(this.props.match.params.id)
 
     if (user) {
-      console.log(user.roles.includes("ROLE_ADMIN"))
       this.setState({
         isAdmin: user.roles.includes("ROLE_ADMIN")
       })
@@ -67,13 +70,11 @@ class ChangeEvent extends Component {
     }))
   }
 
-  onChangeEventDate(e) {
-    const eventDate = e.target.value
-
+  onChangeEventDate(date) {
     this.setState((prevState) => ({
       currentEvent: {
         ...prevState.currentEvent,
-        event_date: eventDate,
+        event_date: date,
       },
     }))
   }
@@ -124,10 +125,9 @@ class ChangeEvent extends Component {
 
   saveEvent() {
     const { currentEvent } = this.state
-
     const { updateEvent } = this.props
 
-    updateEvent(currentEvent)
+    updateEvent({ ...currentEvent, event_date: moment(currentEvent.event_date).toDate() })
       .then((response) => {
         this.setState({
           currentEvent: response,
@@ -143,7 +143,7 @@ class ChangeEvent extends Component {
     this.setState({
       title: "",
       description: "",
-      eventDate: "",
+      event_date: "",
       price: 0,
       available_tickets: 0,
       scheme_url: "",
@@ -159,7 +159,6 @@ class ChangeEvent extends Component {
         this.setState({
           currentEvent: response.data
         })
-        console.log(response.data)
       })
       .catch((e) => {
         console.log(e)
@@ -171,7 +170,7 @@ class ChangeEvent extends Component {
       currentEvent: {
         title,
         description,
-        eventDate,
+        event_date,
         price,
         available_tickets,
         scheme_url,
@@ -220,19 +219,18 @@ class ChangeEvent extends Component {
             </div>
 
             <div className="form-group datepicker" inline="true">
-              <label htmlFor="eventDate">Event Date</label>
-              <input
-                placeholder="Select date"
-                type="date"
-                className="form-control"
-                id="eventDate"
-                min={(new Date()).toISOString().split('T')[0]}
-                required
-                value={eventDate}
-                onChange={this.onChangeEventDate}
-                name="eventDate"
-              />
-              <i className="fas fa-calendar input-prefix"></i>
+              <label htmlFor="event_date">Event Date</label>
+              <DatePicker
+                    className="form-control"
+                    selected={ moment.parseZone(event_date).toDate() }
+                    onChange={ this.onChangeEventDate }
+                    name="selectDate"
+                    showTimeSelect
+                    timeIntervals={30}
+                    timeFormat="HH:mm"
+                    timeCaption="time"
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                />
             </div>
 
             <div className="form-group">

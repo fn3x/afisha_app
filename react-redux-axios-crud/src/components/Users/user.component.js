@@ -39,13 +39,11 @@ class User extends Component {
   }
 
   componentDidMount() {
-    const { user } = this.props
+    const { user, match } = this.props
 
-    const id = this.props.match.params.id || user.id
+    const id = match.path.includes("mypage") ? user.id : match.params.id
     this.getUser(id)
     this.fetchUserEvents(id)
-
-    console.log(this.state)
 
     if (user) {
       this.setState({
@@ -115,7 +113,7 @@ class User extends Component {
   updateInfo() {
     this.props
       .updateUser(this.state.currentUser.id, this.state.currentUser)
-      .then((reponse) => {
+      .then(() => {
         this.setState({ message: "The user was updated successfully!" })
       })
       .catch((e) => {
@@ -225,28 +223,41 @@ class User extends Component {
   renderTicketsInfo() {
     const { events } = this.state
 
-    console.log(events)
     return (
-      <div className="col-md-12">
+      <>
         <h4>Events List</h4>
-          <div className="card-deck">
-            {events &&
-              events.map((event, index) => (
-                <div className="card">
-                  <div
-                    className="card-body"
-                    key={index}
-                    >
-                    <h5 className="card-title">{event.title}</h5>
-                    <p className="card-text">Description: {event.description}</p>
-                    <p className="card-text text-muted">Tickets: {event.available_tickets}</p>
-                    <button type="button" class="btn btn-primary" onClick={() => this.saveTicket(event)}>Download ticket</button>
-                    <button type="button" class="btn btn-danger" onClick={() => this.removeEvent(event.user_event_id)}>Remove</button>
-                  </div>
-                </div>
-              ))}
-          </div>
-      </div>
+        <div className="row">
+            <div className="card-deck" style={{ marginTop: "1rem" }}>
+              {events &&
+                events.map((event, index) => {
+                  var className = "col-md-3"
+                  if (events.length === 1) {
+                    className = "col-md-12"
+                  }
+                  if (events.length === (2 || 3)) {
+                    className = "col-md-6"
+                  }
+                  
+                  return (
+                    <div className={className}>
+                      <div className="card" style={{ marginBottom: "3rem" }}>
+                        <div
+                          className="card-body"
+                          key={index}
+                          >
+                          <h5 className="card-title">{event.title}</h5>
+                          <p className="card-text">Description: {event.description}</p>
+                          <p className="card-text text-muted">Ticket ID: {event.user_event_id}</p>
+                          <button type="button" className="btn btn-primary" onClick={() => this.saveTicket(event)}>Download ticket</button>
+                          <button type="button" className="btn btn-danger" onClick={() => this.removeEvent(event.user_event_id)} style={{ margin: "0.4rem" }}>Remove</button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+            </div>
+        </div>
+      </>
     )
   }
 
@@ -261,17 +272,19 @@ class User extends Component {
   }
 
   removeEvent(userEventId) {
-    const { deleteEventForUser, user } = this.props
+    const { deleteEventForUser, user, match } = this.props
+
+    const id = match.path.includes("mypage") ? user.id : match.params.id
 
     deleteEventForUser(userEventId)
       .then(() => {
-        this.fetchUserEvents(user.id)
+        this.fetchUserEvents(id)
       })
   }
 
   saveTicket(event) {
     const { currentUser } = this.state
-    console.log(currentUser)
+
     const doc = new docx.Document({
       sections: [
         {
@@ -339,7 +352,6 @@ class User extends Component {
     })
 
     docx.Packer.toBlob(doc).then((blob) => {
-      console.log(blob)
       saveAs(blob, "Ticket.docx")
     })
   }

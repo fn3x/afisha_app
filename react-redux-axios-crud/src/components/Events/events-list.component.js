@@ -37,7 +37,6 @@ class EventsList extends Component {
     this.props
       .findByTitle(this.state.searchTitle)
       .then((response) => {
-        console.log(response)
         this.refreshData()
       })
       .catch((e) => {
@@ -85,7 +84,7 @@ class EventsList extends Component {
                 Search
               </button>
               {
-                user.roles.includes("ROLE_ADMIN") &&
+                user && user.roles.includes("ROLE_ADMIN") &&
                 <Link to={"/events/add"}>
                   <button
                     className="btn btn-outline-secondary"

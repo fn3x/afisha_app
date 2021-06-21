@@ -83,7 +83,9 @@ exports.findByUserId = (req, res) => {
     ]
   })
     .then(usersEvents => {
-      userInfo = Object.assign({}, usersEvents)[0].user.dataValues
+      userInfo = Object.assign({}, usersEvents)[0]?.user?.dataValues
+      // if (!userInfo) return []
+
       return {
         id: userInfo.id,
         login: userInfo.login,
@@ -107,6 +109,7 @@ exports.findByUserId = (req, res) => {
       res.send(data);
     })
     .catch(err => {
+      console.log(err)
       res.status(500).send({
         message: "Error retrieving events with user id=" + userId
       });

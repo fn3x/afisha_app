@@ -53,7 +53,6 @@ class UsersList extends Component {
     this.props
       .deleteAllUsers()
       .then((response) => {
-        console.log(response)
         this.refreshData()
       })
       .catch((e) => {
@@ -65,7 +64,6 @@ class UsersList extends Component {
     this.props
       .findByLogin(this.state.searchLogin)
       .then((response) => {
-        console.log(response)
         this.refreshData()
       })
       .catch((e) => {
