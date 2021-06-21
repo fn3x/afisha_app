@@ -1,9 +1,13 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import moment from "moment"
 
 import { updateUser, deleteUser } from "../../actions/users"
 import { getEventsForUser, deleteEventForUser } from "../../actions/users_events"
 import UsersDataService from "../../services/users_db.service"
+
+import { saveAs } from "file-saver"
+import * as docx from "docx"
 
 class User extends Component {
   constructor(props) {
@@ -17,6 +21,7 @@ class User extends Component {
     this.updateInfo = this.updateInfo.bind(this)
     this.removeUser = this.removeUser.bind(this)
     this.removeEvent = this.removeEvent.bind(this)
+    this.saveTicket = this.saveTicket.bind(this)
 
     this.state = {
       currentUser: {
@@ -235,6 +240,7 @@ class User extends Component {
                     <h5 className="card-title">{event.title}</h5>
                     <p className="card-text">Description: {event.description}</p>
                     <p className="card-text text-muted">Tickets: {event.available_tickets}</p>
+                    <button type="button" class="btn btn-primary" onClick={() => this.saveTicket(event)}>Download ticket</button>
                     <button type="button" class="btn btn-danger" onClick={() => this.removeEvent(event.user_event_id)}>Remove</button>
                   </div>
                 </div>
@@ -258,9 +264,99 @@ class User extends Component {
     const { deleteEventForUser, user } = this.props
 
     deleteEventForUser(userEventId)
-      .then(events => {
+      .then(() => {
         this.fetchUserEvents(user.id)
       })
+  }
+
+  saveTicket(event) {
+    const { currentUser } = this.state
+    console.log(currentUser)
+    const doc = new docx.Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new docx.Paragraph({
+              text: currentUser.name,
+              heading: docx.HeadingLevel.TITLE
+            }),
+            this.createHeading(`Ticket №${event.user_event_id} created at ${moment().format("LLL")}`),
+            this.createSubHeading("Event title"),
+            new docx.Paragraph({
+              alignment: docx.AlignmentType.LEFT,
+              children: [
+                new docx.TextRun({
+                  text: event.title,
+                  bold: true,
+                  italics: true
+                })
+              ]
+            }),
+            this.createSubHeading("Description:"),
+            new docx.Paragraph({
+              alignment: docx.AlignmentType.LEFT,
+              children: [
+                new docx.TextRun({
+                  text: event.description,
+                  italics: true
+                })
+              ]
+            }),
+            this.createSubHeading("Date:"),
+            new docx.Paragraph({
+              alignment: docx.AlignmentType.LEFT,
+              children: [
+                new docx.TextRun({
+                  text: event.event_date,
+                  italics: true
+                })
+              ]
+            }),
+            this.createSubHeading("Price:"),
+            new docx.Paragraph({
+              alignment: docx.AlignmentType.LEFT,
+              children: [
+                new docx.TextRun({
+                  text: event.price,
+                  italics: true
+                })
+              ]
+            }),
+            this.createSubHeading("Location:"),
+            new docx.Paragraph({
+              alignment: docx.AlignmentType.LEFT,
+              children: [
+                new docx.TextRun({
+                  text: event.location,
+                  italics: true
+                })
+              ]
+            }),
+          ]
+        }
+      ]
+    })
+
+    docx.Packer.toBlob(doc).then((blob) => {
+      console.log(blob)
+      saveAs(blob, "Ticket.docx")
+    })
+  }
+
+  createHeading(text) {
+    return new docx.Paragraph({
+      text: text,
+      heading: docx.HeadingLevel.HEADING_1,
+      thematicBreak: true
+    });
+  }
+
+  createSubHeading(text) {
+    return new docx.Paragraph({
+      text: text,
+      heading: docx.HeadingLevel.HEADING_2
+    });
   }
 }
 
