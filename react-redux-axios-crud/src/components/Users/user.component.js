@@ -77,17 +77,6 @@ class User extends Component {
     }))
   }
 
-  onChangePhone(e) {
-    const phone = e.target.value
-
-    this.setState((prevState) => ({
-      currentUser: {
-        ...prevState.currentUser,
-        phone: phone,
-      },
-    }))
-  }
-
   onChangeLogin(e) {
     const login = e.target.value
 
@@ -106,6 +95,17 @@ class User extends Component {
       currentUser: {
         ...prevState.currentUser,
         password: password,
+      },
+    }))
+  }
+
+  onChangePhone(e) {
+    const phone = e.target.value
+
+    this.setState((prevState) => ({
+      currentUser: {
+        ...prevState.currentUser,
+        phone,
       },
     }))
   }
