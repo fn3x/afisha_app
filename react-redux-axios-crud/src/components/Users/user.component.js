@@ -16,6 +16,7 @@ class User extends Component {
     this.onChangeLogin = this.onChangeLogin.bind(this)
     this.onChangePassword = this.onChangePassword.bind(this)
     this.onChangeEmail = this.onChangeEmail.bind(this)
+    this.onChangePhone = this.onChangePhone.bind(this)
     this.getUser = this.getUser.bind(this)
     this.fetchUserEvents = this.fetchUserEvents.bind(this)
     this.updateInfo = this.updateInfo.bind(this)
@@ -72,6 +73,17 @@ class User extends Component {
       currentUser: {
         ...prevState.currentUser,
         email: email,
+      },
+    }))
+  }
+
+  onChangePhone(e) {
+    const phone = e.target.value
+
+    this.setState((prevState) => ({
+      currentUser: {
+        ...prevState.currentUser,
+        phone: phone,
       },
     }))
   }
@@ -197,7 +209,7 @@ class User extends Component {
               className="form-control"
               id="phone"
               value={currentUser.phone}
-              onChange={this.onChangeEmail} />
+              onChange={this.onChangePhone} />
           </div>
         </form>
 

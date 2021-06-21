@@ -2,7 +2,8 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
-import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker.css"
+import { Link } from "react-router-dom"
 
 import EventsDataService from "../../services/events_db.service"
 import { createEvent, updateEvent } from "../../actions/events"
@@ -191,12 +192,17 @@ class ChangeEvent extends Component {
     return (
       <div className="submit-form">
         {this.state.submitted ? (
-          <div>
+          <>
             <h4>You submitted successfully!</h4>
-            <button className="btn btn-success" onClick={this.newEvent}>
-              Add
-            </button>
-          </div>
+            <div className="row d-flex justify-content-center align-items-center">
+              <Link to={"/eventslist"} className="btn btn-primary" style={{ marginRight: "0.3rem" }}>
+                To events list
+              </Link>
+              <Link to={"/mypage"} className="btn btn-success" style={{ marginLeft: "0.3rem" }}>
+                To my account
+              </Link>
+            </div>
+          </>
         ) : (
           <div>
             <div className="form-group">
