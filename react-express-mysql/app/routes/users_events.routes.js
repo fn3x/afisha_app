@@ -13,7 +13,7 @@ module.exports = app => {
 
   router.put("/user/:userId", usersEvents.update);
 
-  router.delete("/user/:userId", usersEvents.delete);
+  router.delete("/:userEventId", usersEvents.delete);
 
   router.delete("/", usersEvents.deleteAll);
 

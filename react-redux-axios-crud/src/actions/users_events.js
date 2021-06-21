@@ -30,8 +30,10 @@ export const getEventsForUser = (userId) => async (dispatch) => {
 
     dispatch({
       type: RETRIEVE_USER_EVENTS,
-      payload: res.data,
+      payload: res.data.events,
     })
+
+    return Promise.resolve(res.data.events)
   } catch (err) {
     console.log(err)
   }
@@ -65,13 +67,13 @@ export const updateUserEvent = (id, data) => async (dispatch) => {
   }
 }
 
-export const deleteUsersEvents = (userId) => async (dispatch) => {
+export const deleteEventForUser = (userEventId) => async (dispatch) => {
   try {
-    await UsersEventsDataService.delete(userId)
+    await UsersEventsDataService.delete(userEventId)
 
     dispatch({
       type: DELETE_USER_EVENT,
-      payload: { userId },
+      payload: { userEventId },
     })
   } catch (err) {
     console.log(err)

@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
+
 import { updateUser, deleteUser } from "../../actions/users"
+import { getEventsForUser, deleteEventForUser } from "../../actions/users_events"
 import UsersDataService from "../../services/users_db.service"
 
 class User extends Component {
@@ -11,8 +13,10 @@ class User extends Component {
     this.onChangePassword = this.onChangePassword.bind(this)
     this.onChangeEmail = this.onChangeEmail.bind(this)
     this.getUser = this.getUser.bind(this)
+    this.fetchUserEvents = this.fetchUserEvents.bind(this)
     this.updateInfo = this.updateInfo.bind(this)
     this.removeUser = this.removeUser.bind(this)
+    this.removeEvent = this.removeEvent.bind(this)
 
     this.state = {
       currentUser: {
@@ -23,6 +27,7 @@ class User extends Component {
         email: "",
         phone: ""
       },
+      events: null,
       isAdmin: false,
       message: ""
     }
@@ -31,7 +36,11 @@ class User extends Component {
   componentDidMount() {
     const { user } = this.props
 
-    this.getUser(this.props.match.params.id || user.id)
+    const id = this.props.match.params.id || user.id
+    this.getUser(id)
+    this.fetchUserEvents(id)
+
+    console.log(this.state)
 
     if (user) {
       this.setState({
@@ -92,7 +101,6 @@ class User extends Component {
         this.setState({
           currentUser: response.data,
         })
-        console.log(response.data)
       })
       .catch((e) => {
         console.log(e)
@@ -103,8 +111,6 @@ class User extends Component {
     this.props
       .updateUser(this.state.currentUser.id, this.state.currentUser)
       .then((reponse) => {
-        console.log(reponse)
-        
         this.setState({ message: "The user was updated successfully!" })
       })
       .catch((e) => {
@@ -132,12 +138,14 @@ class User extends Component {
     if (!currentUser && isAdmin) return <h5 className="text-center">User is not found.</h5>
     if (!showForm && !isAdmin) return <h5 className="text-center">You don't have enough rights to view this page.</h5>
 
-    const content = this.getUserInfo(currentUser)
-
-    return content
+    return <>
+        {this.renderUserInfo()}
+        {this.renderTicketsInfo()}
+      </>
   }
 
-  getUserInfo(currentUser) {
+  renderUserInfo() {
+    const { currentUser } = this.state
     return (
       <div className="edit-form">
         <h4>User</h4>
@@ -208,6 +216,52 @@ class User extends Component {
       </div>
     )
   }
+
+  renderTicketsInfo() {
+    const { events } = this.state
+
+    console.log(events)
+    return (
+      <div className="col-md-12">
+        <h4>Events List</h4>
+          <div className="card-deck">
+            {events &&
+              events.map((event, index) => (
+                <div className="card">
+                  <div
+                    className="card-body"
+                    key={index}
+                    >
+                    <h5 className="card-title">{event.title}</h5>
+                    <p className="card-text">Description: {event.description}</p>
+                    <p className="card-text text-muted">Tickets: {event.available_tickets}</p>
+                    <button type="button" class="btn btn-danger" onClick={() => this.removeEvent(event.user_event_id)}>Remove</button>
+                  </div>
+                </div>
+              ))}
+          </div>
+      </div>
+    )
+  }
+
+  fetchUserEvents(id) {
+    const { getEventsForUser } = this.props
+    getEventsForUser(id)
+      .then(events => {
+        this.setState({
+          events
+        })
+      })
+  }
+
+  removeEvent(userEventId) {
+    const { deleteEventForUser, user } = this.props
+
+    deleteEventForUser(userEventId)
+      .then(events => {
+        this.fetchUserEvents(user.id)
+      })
+  }
 }
 
 function mapStateToProps(state) {
@@ -217,4 +271,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { updateUser, deleteUser })(User)
+export default connect(mapStateToProps, { updateUser, deleteUser, getEventsForUser, deleteEventForUser })(User)

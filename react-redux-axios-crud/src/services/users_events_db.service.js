@@ -23,8 +23,8 @@ class UsersEventsDataService {
     return http.put(`${baseURL}/user/${id}`, data)
   }
 
-  delete(id) {
-    return http.delete(`${baseURL}/user/${id}`)
+  delete(userEventId) {
+    return http.delete(`${baseURL}/${userEventId}`)
   }
 
   deleteAll() {

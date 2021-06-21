@@ -91,6 +91,7 @@ exports.findByUserId = (req, res) => {
         events: usersEvents.map(userEvent => {
           eventInfo = userEvent.event
           return Object.assign({}, {
+            user_event_id: userEvent.id,
             id: eventInfo.id,
             title: eventInfo.title,
             description: eventInfo.description,
@@ -179,10 +180,10 @@ exports.update = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-  const userId = req.params.userId;
+  const userEventId = req.params.userEventId;
 
   UsersEvents.destroy({
-    where: { id: id }
+    where: { id: userEventId }
   })
     .then(num => {
       if (num == 1) {
@@ -191,13 +192,13 @@ exports.delete = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot delete users events with user id=${userId}. Maybe event was not found!`
+          message: `Cannot delete users events with userEventId=${userEventId}. Maybe event was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete event with id=" + id
+        message: "Could not delete event with userEventId=" + userEventId
       });
     });
 };
