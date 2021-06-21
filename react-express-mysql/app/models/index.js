@@ -23,6 +23,7 @@ db.events = require("./events.model.js")(sequelize, Sequelize);
 db.users = require("./users.model.js")(sequelize, Sequelize);
 db.usersEvents = require("./users_events.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
+db.privilege = require("./privilege.model.js")(sequelize, Sequelize);
 
 db.users.hasMany(db.usersEvents, { as: 'users' })
 db.events.hasMany(db.usersEvents, { as: 'events' })
@@ -34,12 +35,23 @@ db.role.belongsToMany(db.users, {
   foreignKey: "roleId",
   otherKey: "userId"
 })
+db.privilege.belongsToMany(db.users, {
+  through: "user_privileges",
+  foreignKey: "privilegeId",
+  otherKey: "userId"
+})
 db.users.belongsToMany(db.role, {
   through: "user_roles",
   foreignKey: "userId",
   otherKey: "roleId"
 })
+db.users.belongsToMany(db.privilege, {
+  through: "user_privileges",
+  foreignKey: "userId",
+  otherKey: "privilegeId"
+})
 
 db.ROLES = ["user", "admin", "moderator"]
+db.PRIVILEGES = ["None", "Student", "Veteran"]
 
 module.exports = db;

@@ -21,29 +21,31 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./app/models");
-const Role = db.role;
+// const Privilege = db.privilege;
 
 db.sequelize.sync();
 // drop the table if it already exists
 // db.sequelize.sync().then(() => {
-//   console.log("Drop and re-sync db.")
 //   initial()
 // });
 
 // function initial() {
-//   Role.create({
+//   Privilege.create({
 //     id: 1,
-//     name: "user"
+//     discount_value: 0,
+//     name: "None"
 //   })
- 
-//   Role.create({
+
+//   Privilege.create({
 //     id: 2,
-//     name: "moderator"
+//     discount_value: 50,
+//     name: "Student"
 //   })
- 
-//   Role.create({
+
+//   Privilege.create({
 //     id: 3,
-//     name: "admin"
+//     discount_value: 70,
+//     name: "Veteran"
 //   })
 // }
 

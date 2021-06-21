@@ -1,9 +1,10 @@
-const db = require("../models");
-const config = require("../config/auth.config");
-const Users = db.users;
-const Role = db.role;
+const db = require("../models")
+const config = require("../config/auth.config")
+const Users = db.users
+const Role = db.role
+const Privilege = db.privilege
 
-const Op = db.Sequelize.Op;
+const Op = db.Sequelize.Op
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -26,13 +27,33 @@ exports.signup = (req, res) => {
           }
         }).then(roles => {
           user.setRoles(roles).then(() => {
-            res.send({ message: "User was registered successfully!" });
+            Privilege.findAll({
+              where: {
+                name: req.body.category
+              }
+            }).then((privileges) => {
+              console.log(privileges)
+              user.setPrivileges(privileges)
+                .then(() => {
+                  res.send({ message: "User was registered successfully!" })
+                })
+            })
           });
         });
       } else {
         // user role = 1
         user.setRoles([1]).then(() => {
-          res.send({ message: "User was registered successfully!" });
+            Privilege.findAll({
+              where: {
+                name: req.body.category
+              }
+            }).then((privileges) => {
+              console.log(privileges)
+              user.setPrivileges(privileges)
+                .then(() => {
+                  res.send({ message: "User was registered successfully!" })
+                })
+            })
         });
       }
     })
@@ -73,14 +94,20 @@ exports.signin = (req, res) => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
-        res.status(200).send({
-          id: user.id,
-          login: user.login,
-          name: user.username,
-          email: user.email,
-          roles: authorities,
-          accessToken: token
-        });
+
+        user.getPrivileges().then(privileges => {
+          const discountValue = privileges[0].discount_value
+
+          res.status(200).send({
+            id: user.id,
+            login: user.login,
+            name: user.username,
+            email: user.email,
+            roles: authorities,
+            discountValue,
+            accessToken: token
+          });
+        })
       });
     })
     .catch(err => {

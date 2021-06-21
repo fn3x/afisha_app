@@ -65,12 +65,14 @@ class Register extends Component {
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeLogin = this.onChangeLogin.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeCategory = this.onChangeCategory.bind(this);
 
     this.state = {
       login: "",
       username: "",
       email: "",
       password: "",
+      category: 0,
       successful: false,
     };
   }
@@ -99,19 +101,26 @@ class Register extends Component {
     });
   }
 
+  onChangeCategory(e) {
+    this.setState({
+      category: e.target.value,
+    });
+  }
+
   handleRegister(e) {
-    e.preventDefault();
+    e.preventDefault()
 
     this.setState({
       successful: false,
-    });
+    })
 
-    this.form.validateAll();
+    this.form.validateAll()
+
 
     if (this.checkBtn.context._errors.length === 0) {
       this.props
         .dispatch(
-          register(this.state.username, this.state.email, this.state.login, this.state.password)
+          register(this.state.username, this.state.email, this.state.login, this.state.password, this.state.category)
         )
         .then(() => {
           this.setState({
@@ -187,7 +196,28 @@ class Register extends Component {
                 />
               </div>
 
-              <div className="form-group">
+              <h5>Privilege category:</h5>
+              
+              <div class="form-check">
+                <Input class="form-check-input" type="radio" name="privilegeRadios" id="noneRadio" value="None" onChange={this.onChangeCategory} />
+                <label class="form-check-label" for="noneRadio">
+                None
+                </label>
+              </div>
+              <div class="form-check">
+                <Input class="form-check-input" type="radio" name="privilegeRadios" id="studentRadio" value="Student" onChange={this.onChangeCategory} />
+                <label class="form-check-label" for="studentRadio">
+                Student
+                </label>
+              </div>
+              <div class="form-check">
+                <Input class="form-check-input" type="radio" name="privilegeRadios" id="veteranRadio" value="Veteran" onChange={this.onChangeCategory} />
+                <label class="form-check-label" for="veteranRadio">
+                Veteran
+                </label>
+              </div>
+
+              <div className="form-group" style={{ marginTop: "0.8rem" }}>
                 <button className="btn btn-primary btn-block">Sign Up</button>
               </div>
             </div>
